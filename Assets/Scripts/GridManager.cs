@@ -15,9 +15,9 @@ public class GridManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		for (int forX = 0; forX <= ScaleX; forX++)
+		for (int forX = 0; forX <= ScaleX; forX = forX +2)
 		{
-			for (int forY = 0; forY <= ScaleY; forY++)
+			for (int forY = 0; forY <= ScaleY; forY = forY +2)
 			{
 				GameObject GRID_PIECE = (GameObject)Instantiate (GRIDTEMPLATE, (this.transform.position + new Vector3(forX, 0, forY)), this.transform.rotation);
 				GRID_PIECE.transform.parent = this.transform;
