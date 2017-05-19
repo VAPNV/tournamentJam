@@ -18,16 +18,17 @@ public class HealthBar : MonoBehaviour {
         // Draw a Health Bar
 
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+        if (0 < pos.z) {
+          // draw health bar background
+          GUI.color = Color.grey;
+          GUI.backgroundColor = Color.grey;
+          GUI.Box(new Rect(pos.x - 26, Screen.height - pos.y + 20, Combat.maxHealth / 2, 7), ".", backStyle);
 
-        // draw health bar background
-        GUI.color = Color.grey;
-        GUI.backgroundColor = Color.grey;
-        GUI.Box(new Rect(pos.x - 26, Screen.height - pos.y + 20, Combat.maxHealth / 2, 7), ".", backStyle);
-
-        // draw health bar amount
-        GUI.color = Color.green;
-        GUI.backgroundColor = Color.green;
-        GUI.Box(new Rect(pos.x - 25, Screen.height - pos.y + 21, combat.health / 2, 5), ".", healthStyle);
+          // draw health bar amount
+          GUI.color = Color.green;
+          GUI.backgroundColor = Color.green;
+          GUI.Box(new Rect(pos.x - 25, Screen.height - pos.y + 21, combat.health / 2, 5), ".", healthStyle);
+        }
     }
 
     void InitStyles() {
