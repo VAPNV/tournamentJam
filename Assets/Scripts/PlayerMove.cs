@@ -101,7 +101,14 @@ public class PlayerMove : NetworkBehaviour {
     void RpcShoot(Vector3 dir)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, 3))
-            Debug.DrawRay(hit.point, Vector3.up, Color.red, 3);
+		if (Physics.Raycast (transform.position, dir, out hit, 3)) {
+			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
+
+			if (hit.collider.GetComponentInParent<Grid> ()) 
+			{
+				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
+				GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+			}
+		}
     }
 }
