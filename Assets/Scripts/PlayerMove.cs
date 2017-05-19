@@ -13,6 +13,8 @@ public class PlayerMove : NetworkBehaviour {
     private float gravVelocity;
     private CharacterController controller;
 
+	private string WhatToBuild = "Ground";
+
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
         GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.5f, 0.2f);
@@ -47,6 +49,10 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
+		if (Input.GetMouseButtonDown(2))
+		{
+			this.CycleWhatToBuild ();
+		}
 
         mouse.LookRotation(transform, cam.transform);
         mouse.UpdateCursorLock();
@@ -79,6 +85,18 @@ public class PlayerMove : NetworkBehaviour {
         gravVelocity = jumpVelocity;
     }
 
+	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
+	void CycleWhatToBuild()
+	{
+		if (WhatToBuild == "Ground")
+			WhatToBuild = "Trench_Low";
+		else if (WhatToBuild == "Trench_Low")
+			WhatToBuild = "Trench_Deep";
+		else if (WhatToBuild == "Trench_Deep")
+			WhatToBuild = "Ground";
+	}
+
+
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
     [Command]
@@ -101,13 +119,22 @@ public class PlayerMove : NetworkBehaviour {
     void RpcShoot(Vector3 dir)
     {
         RaycastHit hit;
-		if (Physics.Raycast (transform.position, dir, out hit, 3)) {
+		if (Physics.Raycast (transform.position, dir, out hit, 4)) {
 			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 			if (hit.collider.GetComponentInParent<Grid> ()) 
 			{
 				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
-				GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+
+				if (WhatToBuild == "Ground")
+				//if GridThatWasHit
+					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+				else if (WhatToBuild == "Trench_Low")
+					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+				else if (WhatToBuild == "Trench_Deep")
+					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+
+				
 			}
 		}
     }
