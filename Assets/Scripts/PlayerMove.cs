@@ -6,10 +6,18 @@ using UnityEngine.Networking;
 public class PlayerMove : NetworkBehaviour {
 
     public GameObject bulletPrefab;
+    private MouseLook mouse;
+    private Camera cam;
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
         GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.5f, 0.2f);
+        cam = Camera.main;
+        cam.transform.SetParent(transform);
+        cam.transform.localPosition = Vector3.zero;
+        cam.transform.localRotation = Quaternion.identity;
+        mouse = new MouseLook();
+        mouse.Init(transform, cam.transform);
     }
 
     // Update is called once per frame
@@ -17,14 +25,16 @@ public class PlayerMove : NetworkBehaviour {
         if (!isLocalPlayer) {
             return;
         }
-        float x = Input.GetAxis("Horizontal") * 0.1f;
-        float z = Input.GetAxis("Vertical") * 0.1f;
+        Vector3 move = Input.GetAxis("Vertical") * Vector3.forward + Input.GetAxis("Horizontal") * Vector3.right;
 
-        transform.Translate(x, 0, z);
+        transform.Translate(move * 0.1f);
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetMouseButtonDown(0)) {
             CmdFire();
         }
+
+        mouse.LookRotation(transform, cam.transform);
+        mouse.UpdateCursorLock();
     }
 
     // [Command] tells this will be called from client but invoked on server
@@ -32,10 +42,10 @@ public class PlayerMove : NetworkBehaviour {
     [Command]
     void CmdFire() {
         // Create the bullet object locally
-        GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position - transform.forward, Quaternion.identity);
+        GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + cam.transform.forward, Quaternion.identity);
 
         // Make the bullet move away in front of the player
-        bullet.GetComponent<Rigidbody>().velocity = -transform.forward * 4;
+        bullet.GetComponent<Rigidbody>().velocity = cam.transform.forward * 4;
 
         // Spawn the bullet on the clients
         NetworkServer.Spawn(bullet);
