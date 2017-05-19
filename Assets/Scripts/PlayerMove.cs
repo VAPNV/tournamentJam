@@ -6,8 +6,11 @@ using UnityEngine.Networking;
 public class PlayerMove : NetworkBehaviour {
 
     public GameObject bulletPrefab;
+    public float jumpVelocity;
+    public float gravity;
     private MouseLook mouse;
     private Camera cam;
+    private float gravVelocity;
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
@@ -33,8 +36,31 @@ public class PlayerMove : NetworkBehaviour {
             CmdFire();
         }
 
+        Gravity();
+        if (Input.GetKeyDown(KeyCode.Space))
+            Jump();
+
         mouse.LookRotation(transform, cam.transform);
         mouse.UpdateCursorLock();
+    }
+
+    void Gravity()
+    {
+        transform.Translate(Vector3.up * gravVelocity);
+        gravVelocity -= gravity;
+        if (transform.position.y <= 0)
+        {
+            gravVelocity = 0;
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        }
+    }
+
+    void Jump()
+    {
+        if (transform.position.y > 0)
+            return;
+        gravVelocity = jumpVelocity;
+        Debug.Log("jump");
     }
 
     // [Command] tells this will be called from client but invoked on server
