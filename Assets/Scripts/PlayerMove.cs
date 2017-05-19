@@ -11,6 +11,7 @@ public class PlayerMove : NetworkBehaviour {
     private MouseLook mouse;
     private Camera cam;
     private float gravVelocity;
+    private CharacterController controller;
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
@@ -21,6 +22,7 @@ public class PlayerMove : NetworkBehaviour {
         cam.transform.localRotation = Quaternion.identity;
         mouse = new MouseLook();
         mouse.Init(transform, cam.transform);
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -28,10 +30,9 @@ public class PlayerMove : NetworkBehaviour {
         if (!isLocalPlayer) {
             return;
         }
-        Vector3 move = Input.GetAxis("Vertical") * Vector3.forward + Input.GetAxis("Horizontal") * Vector3.right;
+        Vector3 move = Input.GetAxis("Vertical") * transform.forward + Input.GetAxis("Horizontal") * transform.right;
 
-        transform.Translate(move * 0.1f);
-        Gravity();
+        controller.Move(move * 0.1f + Gravity());
     }
 
     void Update()
@@ -51,20 +52,29 @@ public class PlayerMove : NetworkBehaviour {
         mouse.UpdateCursorLock();
     }
 
-    void Gravity()
+    bool OnGround()
     {
-        transform.Translate(Vector3.up * gravVelocity);
-        gravVelocity -= gravity;
-        if (transform.position.y <= 0)
+        RaycastHit hit;
+        return Physics.SphereCast(transform.position, 0.5f, Vector3.down, out hit, 1.25f + 0.1f);
+    }
+
+    Vector3 Gravity()
+    {
+        if (OnGround() && gravVelocity <= 0)
         {
             gravVelocity = 0;
-            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         }
+        else
+        {
+            gravVelocity -= gravity;
+        }
+        Debug.Log(gravVelocity);
+        return Vector3.up * gravVelocity;
     }
 
     void Jump()
     {
-        if (transform.position.y > 0)
+        if (!OnGround())
             return;
         gravVelocity = jumpVelocity;
     }
