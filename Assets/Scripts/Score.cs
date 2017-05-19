@@ -3,5 +3,8 @@ using UnityEngine.Networking;
 
 public class Score
 {
+
+
+
     
 }
