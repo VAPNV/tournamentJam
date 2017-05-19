@@ -33,7 +33,7 @@ public class PlayerMove : NetworkBehaviour {
         transform.Translate(move * 0.1f);
 
         if (Input.GetMouseButtonDown(0)) {
-            CmdFire();
+            CmdFire(cam.transform.forward);
         }
 
         Gravity();
@@ -60,23 +60,31 @@ public class PlayerMove : NetworkBehaviour {
         if (transform.position.y > 0)
             return;
         gravVelocity = jumpVelocity;
-        Debug.Log("jump");
     }
 
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
     [Command]
-    void CmdFire() {
+    void CmdFire(Vector3 dir) {
         // Create the bullet object locally
-        GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + cam.transform.forward, Quaternion.identity);
+        //GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + cam.transform.forward, Quaternion.identity);
 
         // Make the bullet move away in front of the player
-        bullet.GetComponent<Rigidbody>().velocity = cam.transform.forward * 4;
+        //bullet.GetComponent<Rigidbody>().velocity = cam.transform.forward * 4;
 
         // Spawn the bullet on the clients
-        NetworkServer.Spawn(bullet);
+        //NetworkServer.Spawn(bullet);
 
         // When the bullet is destroyed on the server it will automaticaly be destroyed on clients
-        Destroy(bullet, 2.0f);
+        //Destroy(bullet, 2.0f);
+        RpcShoot(dir);
+    }
+
+    [ClientRpc]
+    void RpcShoot(Vector3 dir)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, dir, out hit, 3))
+            Debug.DrawRay(hit.point, Vector3.up, Color.red, 3);
     }
 }
