@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour {
 	public int y;
 		// these could be inherited from transform but meh
 
-	string WhatIam = "NOTHING";
+	public string WhatIam = "NOTHING";
 	public GridManager Mother;
 
 	public GameObject GridModel;

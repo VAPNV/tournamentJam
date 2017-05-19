@@ -13,7 +13,13 @@ public class PlayerMove : NetworkBehaviour {
     private float gravVelocity;
     private CharacterController controller;
 
-	private string WhatToBuild = "Ground";
+	private string WhatToBuild = "Shovel";
+	public GameObject Shovel;
+	public GameObject PickAxe;
+
+	void Start(){
+		PickAxe.SetActive (false);
+	}
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
@@ -88,12 +94,16 @@ public class PlayerMove : NetworkBehaviour {
 	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
 	void CycleWhatToBuild()
 	{
-		if (WhatToBuild == "Ground")
-			WhatToBuild = "Trench_Low";
-		else if (WhatToBuild == "Trench_Low")
-			WhatToBuild = "Trench_Deep";
-		else if (WhatToBuild == "Trench_Deep")
-			WhatToBuild = "Ground";
+		if (WhatToBuild == "Shovel") {
+			WhatToBuild = "PickAxe";
+			PickAxe.SetActive (true);
+			Shovel.SetActive (false);
+		}
+		else if (WhatToBuild == "PickAxe"){
+			WhatToBuild = "Shovel";
+			Shovel.SetActive (true);
+			PickAxe.SetActive (false);
+		}
 	}
 
 
@@ -124,15 +134,26 @@ public class PlayerMove : NetworkBehaviour {
 
 			if (hit.collider.GetComponentInParent<Grid> ()) 
 			{
+				//Playsound! *CHUNK*
+
 				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
 
-				if (WhatToBuild == "Ground")
-				//if GridThatWasHit
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
-				else if (WhatToBuild == "Trench_Low")
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-				else if (WhatToBuild == "Trench_Deep")
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+				//Pickaxe GOES DOWN
+				if (WhatToBuild == "PickAxe") {
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+
+				}
+
+				//Shovel goes  UP
+				else if (WhatToBuild == "Shovel") {
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+				}
 
 				
 			}
