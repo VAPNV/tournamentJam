@@ -31,12 +31,19 @@ public class PlayerMove : NetworkBehaviour {
         Vector3 move = Input.GetAxis("Vertical") * Vector3.forward + Input.GetAxis("Horizontal") * Vector3.right;
 
         transform.Translate(move * 0.1f);
+        Gravity();
+    }
 
-        if (Input.GetMouseButtonDown(0)) {
+    void Update()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
             CmdFire(cam.transform.forward);
         }
-
-        Gravity();
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
