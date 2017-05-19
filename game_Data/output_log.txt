@@ -1,4 +1,4 @@
-Initialize engine version: 5.5.0f3 (38b4efef76f0)
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
@@ -15,15 +15,14 @@ Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll (
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
-Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.027 seconds
+- Completed reload, in  0.021 seconds
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.688001 ms
-Setting up 1 worker threads for Enlighten.
-  Thread -> id: 2218 -> priority: 1 
+UnloadTime: 1.768446 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 34e4 -> priority: 1 
+  Thread -> id: 37f0 -> priority: 1 
