@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Combat : NetworkBehaviour {
 
@@ -31,7 +32,10 @@ public class Combat : NetworkBehaviour {
 
     public void Update()
 	{
-		//Debug.Log (health);
+		if (isLocalPlayer)
+        {
+            GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
+        }
 	}
 
 	public void TakeDamage(int amount, Combat shooter) {

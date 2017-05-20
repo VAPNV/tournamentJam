@@ -207,11 +207,8 @@ public class PlayerMove : NetworkBehaviour {
     [Command]
     void CmdCycleWhatToBuild(int dir)
 	{
-        Debug.Log("Before: " + WhatToBuild);
         WhatToBuild += dir;
-        Debug.Log("After: " + WhatToBuild);
         WhatToBuild = mod(WhatToBuild, fighting ? fightTools.Length : buildTools.Length);
-        Debug.Log("Finally: " + WhatToBuild);
     }
 
     string GetToolAction()
@@ -229,11 +226,10 @@ public class PlayerMove : NetworkBehaviour {
 		Debug.Log(GetToolAction());
 		if (GetToolAction() == "Rifle") {
 
-			GameObject ShootEffect = (GameObject)Instantiate (ShootingEffect, RifleBarrelEnd.transform.position, this.transform.rotation);
-
+            RpcShootEffect();
 			if (Physics.Raycast (transform.position, dir, out hit))
             {
-				GameObject DustCloud = (GameObject)Instantiate (HitDustCloud, hit.point, new Quaternion(0,0,0,0));
+                RpcDustEffect(hit.point);
 
                 if (hit.transform.tag == "Player")
                 {
@@ -341,6 +337,18 @@ public class PlayerMove : NetworkBehaviour {
             }
 		}
 	}
+
+    [ClientRpc]
+    void RpcShootEffect()
+    {
+        GameObject ShootEffect = (GameObject)Instantiate(ShootingEffect, RifleBarrelEnd.transform.position, this.transform.rotation);
+    }
+
+    [ClientRpc]
+    void RpcDustEffect(Vector3 point)
+    {
+        GameObject DustCloud = (GameObject)Instantiate(HitDustCloud, point, new Quaternion(0, 0, 0, 0));
+    }
 
     [Command]
 	void CmdPlaySoundHere(SoundType WhatToPlay)

@@ -989,13 +989,13 @@ MonoBehaviour:
   WhatToBuild: 0
   fighting: 0
   buildTools:
-  - {fileID: 100000, guid: bde7016f14eaaa24a92b86b31baedbde, type: 3}
-  - {fileID: 100000, guid: e3a55ea497d35d04895f52da13a11673, type: 3}
-  - {fileID: 100004, guid: bd7423d6545064c42bf6ce22d56e6089, type: 3}
-  - {fileID: 100000, guid: 5b27e525e190f17459b6c0fe5fc9b084, type: 3}
+  - {fileID: 1565202145866488}
+  - {fileID: 1571368861302074}
+  - {fileID: 1072235516767070}
+  - {fileID: 1138003608792514}
   fightTools:
-  - {fileID: 100000, guid: a1c9358faa2b73147a9b95fedc3ed259, type: 3}
-  - {fileID: 100000, guid: a62c0fe2b67df1d4f9bf3c3af731b628, type: 3}
+  - {fileID: 1917735500753308}
+  - {fileID: 1928303950398854}
   toolActions:
   - Shovel
   - PickAxe
