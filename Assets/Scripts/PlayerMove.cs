@@ -58,6 +58,7 @@ public class PlayerMove : NetworkBehaviour {
 	public GameObject RifleBarrelEnd;
 
 	public AudioClip RifleShootSound;
+	public AudioClip RifleEmptySound;
 
 
 	void Start(){
@@ -158,7 +159,7 @@ public class PlayerMove : NetworkBehaviour {
 					if (GetToolAction() == "Grenade") {
             leftButtonHeld = true;
           } else {
-            CmdFire(cam.transform.forward);
+				CmdFire(cam.transform.forward + new Vector3(( Random.Range(-0.02f,0.02f)) , (Random.Range(-0.02f,0.02f)),(Random.Range(-0.02f,0.02f)) ) );
 					}
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
@@ -262,10 +263,12 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Rifle") {
+		if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
+
+			this.GetComponent<Combat> ().Ammo = this.GetComponent<Combat> ().Ammo - 15;
 
             RpcShootEffect();
-			if (Physics.Raycast (transform.position, dir, out hit))
+			if (Physics.Raycast (cam.transform.position + cam.transform.forward, dir, out hit))
             {
                 RpcDustEffect(hit.point);
 
@@ -285,6 +288,13 @@ public class PlayerMove : NetworkBehaviour {
             }
 
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
+
+		}
+		//no amo click click
+
+		else if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo < 15)) {
+
+			this.CmdPlaySoundHere (SoundType.RifleEmptySound);
 
 		}
 			else if (Physics.Raycast (cam.transform.position, dir, out hit, 4)) {
@@ -408,7 +418,7 @@ public class PlayerMove : NetworkBehaviour {
     }
 
 
-    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot, Grenadeboom };
+	public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot , RifleEmptySound};
     [ClientRpc]
 
 	/// <summary>
@@ -417,7 +427,7 @@ public class PlayerMove : NetworkBehaviour {
 	/// <param name="WhatToPlay">What to play.</param>
 	void RpcPlaySoundHere(SoundType WhatToPlay)
 	{
-        AudioClip[] clips = { ItemSwichSound, ShovelDigSound, PickAxeDigSound, HammerActionSound, ConcreteActionSound, RifleShootSound};
+		AudioClip[] clips = { ItemSwichSound, ShovelDigSound, PickAxeDigSound, HammerActionSound, ConcreteActionSound, RifleShootSound, RifleEmptySound};
         GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
 
 		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
