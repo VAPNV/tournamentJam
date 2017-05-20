@@ -20,9 +20,12 @@ public class PlayerMove : NetworkBehaviour {
 
 	// INVENTORY
     [SyncVar]
-	private int WhatToBuild = 0;
-  public GameObject[] tools = new GameObject[]{};
-  public string[] toolActions = new string[]{};
+	public int WhatToBuild = 0;
+    [SyncVar]
+    public bool fighting = false;
+    public GameObject[] buildTools = new GameObject[]{};
+    public GameObject[] fightTools = new GameObject[] { };
+    public string[] toolActions = new string[]{};
 
 	// AUDIO
 	public GameObject SoundplayerPrefab;
@@ -36,10 +39,14 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip RifleShootSound;
 
 	void Start(){
-    foreach (GameObject tool in tools) {
-		    tool.SetActive(false);
-    }
-    tools[WhatToBuild].SetActive(true);
+        foreach (GameObject tool in buildTools) {
+		        tool.SetActive(false);
+        }
+        foreach (GameObject tool in fightTools)
+        {
+            tool.SetActive(false);
+        }
+        buildTools[WhatToBuild].SetActive(true);
 	}
 
     // Use this for initialization for the local player object
@@ -56,11 +63,15 @@ public class PlayerMove : NetworkBehaviour {
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
 
-        foreach (GameObject tool in tools) {
+        foreach (GameObject tool in buildTools) {
     		    tool.transform.SetParent (cam.transform);
         }
+        foreach (GameObject tool in fightTools)
+        {
+            tool.transform.SetParent(cam.transform);
+        }
 
-		cam.transform.localPosition = new Vector3(0,1,0);	//head goes UP!
+        cam.transform.localPosition = new Vector3(0,1,0);	//head goes UP!
 
     }
 
@@ -80,11 +91,18 @@ public class PlayerMove : NetworkBehaviour {
             RobotModel.material.color = Color.yellow;
         else if (GetComponent<Combat>().team == Combat.Team.Blue)
             RobotModel.material.color = Color.blue;
-        foreach (GameObject tool in tools)
+        foreach (GameObject tool in buildTools)
         {
             tool.SetActive(false);
         }
-        tools[WhatToBuild].SetActive(true);
+        foreach (GameObject tool in fightTools)
+        {
+            tool.SetActive(false);
+        }
+        if (fighting)
+            fightTools[WhatToBuild].SetActive(true);
+        else
+            buildTools[WhatToBuild].SetActive(true);
         if (!isLocalPlayer)
         {
             return;
@@ -95,14 +113,14 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetMouseButtonDown(0))
         {
-					if (toolActions[WhatToBuild] == "Grenade") {
+					if (GetToolAction() == "Grenade") {
             leftButtonHeld = true;
           } else {
             CmdFire(cam.transform.forward);
 					}
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
-            if (toolActions[WhatToBuild] == "Grenade") {
+            if (GetToolAction() == "Grenade") {
               CmdThrowGrenade(cam.transform.forward);
             }
             leftButtonHeld = false;
@@ -172,7 +190,7 @@ public class PlayerMove : NetworkBehaviour {
 
     [Command]
     void CmdThrowGrenade(Vector3 dir) {
-      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+      GameObject grenade = (GameObject) Instantiate(grenadePrefab, fightTools[WhatToBuild].transform.position + dir, Quaternion.identity);
       grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
       grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
       NetworkServer.Spawn(grenade);
@@ -182,18 +200,29 @@ public class PlayerMove : NetworkBehaviour {
     [Command]
     void CmdCycleWhatToBuild(int dir)
 	{
+        Debug.Log("Before: " + WhatToBuild);
         WhatToBuild += dir;
-        WhatToBuild = mod(WhatToBuild, tools.Length);
+        Debug.Log("After: " + WhatToBuild);
+        WhatToBuild = mod(WhatToBuild, fighting ? fightTools.Length : buildTools.Length);
+        Debug.Log("Finally: " + WhatToBuild);
     }
 
+    string GetToolAction()
+    {
+        if (fighting)
+            return toolActions[WhatToBuild + buildTools.Length];
+        return toolActions[WhatToBuild];
+    }
+
+    [Command]
     void CmdShoot(Vector3 dir)
 	{
 		RaycastHit hit;
 
-		Debug.Log(toolActions[WhatToBuild]);
-		if (toolActions[WhatToBuild] == "Rifle") {
+		Debug.Log(GetToolAction());
+		if (GetToolAction() == "Rifle") {
 
-			if (Physics.Raycast (transform.position, dir, out hit))
+			if (Physics.Raycast (cam.transform.position, dir, out hit))
             {
                 if (hit.transform.tag == "Player")
                 {
@@ -204,7 +233,7 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
 
 		}
-			else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+			else if (Physics.Raycast (cam.transform.position, dir, out hit, 4)) {
 				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 
@@ -217,7 +246,7 @@ public class PlayerMove : NetworkBehaviour {
 				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
 
 				//Pickaxe GOES DOWN
-				if (toolActions[WhatToBuild] == "PickAxe") {
+				if (GetToolAction() == "PickAxe") {
 
 					this.CmdPlaySoundHere (SoundType.PickAxeDig);
 
@@ -231,7 +260,7 @@ public class PlayerMove : NetworkBehaviour {
                 }
 
                 //Shovel goes  UP
-                else if (toolActions[WhatToBuild] == "Shovel" && GridThatWasHit.isOccupied(RobotModel) == false) {
+                else if (GetToolAction() == "Shovel" && GridThatWasHit.isOccupied(RobotModel) == false) {
 
 					this.CmdPlaySoundHere (SoundType.ShovelDig);
 
@@ -242,7 +271,7 @@ public class PlayerMove : NetworkBehaviour {
                 }
 
 				//Hammer Adds WOOD
-				else if (toolActions[WhatToBuild] == "Hammer") {
+				else if (GetToolAction() == "Hammer") {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
 
@@ -259,7 +288,7 @@ public class PlayerMove : NetworkBehaviour {
 				}
 
 				//ConcreteCammer Adds Concreteblocks and Walls
-				else if (toolActions[WhatToBuild] == "Concrete") {
+				else if (GetToolAction() == "Concrete") {
 
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
