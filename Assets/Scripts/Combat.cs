@@ -7,11 +7,15 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 
     public const int maxHealth = 100;
+
     public bool destroyOnDeath;
 	public enum Team
 	{
 		Orange, Blue, None,
 	}
+
+	[SyncVar]
+	public int Ammo = 100;
 
 	[SyncVar]
 	public int score = 0;
@@ -36,10 +40,14 @@ public class Combat : NetworkBehaviour {
 
     public void Update()
 	{
+		if (Ammo<100)
+			Ammo++;
+
 		if (isLocalPlayer)
-       {
-           GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
-       }
+        {
+			GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
+			GameObject.Find ("AmmoText").GetComponent<Text> ().text = "AMMO: " + Ammo/15;
+        }
 	}
 
 	public void TakeDamage(int amount, Combat shooter) {

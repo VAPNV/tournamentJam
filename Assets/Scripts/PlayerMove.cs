@@ -45,9 +45,15 @@ public class PlayerMove : NetworkBehaviour {
 
 	public int RifleDamage = 30;
 
+    [SyncVar]
+    public int grenadesLeft;
+    [SyncVar]
+    public int hammerLeft;
+    [SyncVar]
+    public int concreteLeft;
 
-	// AUDIO
-	public GameObject SoundplayerPrefab;
+    // AUDIO
+    public GameObject SoundplayerPrefab;
 	public AudioClip ItemSwichSound;
 	public AudioClip ShovelDigSound;
 	public AudioClip PickAxeDigSound;
@@ -59,6 +65,7 @@ public class PlayerMove : NetworkBehaviour {
 	public GameObject RifleBarrelEnd;
 
 	public AudioClip RifleShootSound;
+	public AudioClip RifleEmptySound;
 
 
 	void Start(){
@@ -157,15 +164,18 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetMouseButtonDown(0))
         {
-					if (GetToolAction() == "Grenade") {
+		    if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
             leftButtonHeld = true;
           } else {
-            CmdFire(cam.transform.forward);
+				CmdFire(cam.transform.forward + new Vector3(( Random.Range(-0.02f,0.02f)) , (Random.Range(-0.02f,0.02f)),(Random.Range(-0.02f,0.02f)) ) );
 					}
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
-            if (GetToolAction() == "Grenade") {
+            if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
               CmdThrowGrenade(cam.transform.forward);
+                    grenadesLeft--;
+                    if (grenadesLeft <= 0)
+                        CmdCycleWhatToBuild(1);
             }
             leftButtonHeld = false;
             hold = 0;
@@ -264,10 +274,12 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Rifle") {
+		if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
+
+			this.GetComponent<Combat> ().Ammo = this.GetComponent<Combat> ().Ammo - 15;
 
             RpcShootEffect();
-			if (Physics.Raycast (transform.position, dir, out hit))
+			if (Physics.Raycast (cam.transform.position + cam.transform.forward, dir, out hit))
             {
                 RpcDustEffect(hit.point);
 
@@ -287,6 +299,13 @@ public class PlayerMove : NetworkBehaviour {
             }
 
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
+
+		}
+		//no amo click click
+
+		else if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo < 15)) {
+
+			this.CmdPlaySoundHere (SoundType.RifleEmptySound);
 
 		}
 			else if (Physics.Raycast (cam.transform.position, dir, out hit, 4)) {
@@ -331,17 +350,27 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
-					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                    if (GridThatWasHit.WhatIam == "Ground_Grass" && hammerLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                        hammerLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy" && hammerLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                        hammerLeft--;
+                    }
 
-					else if (GridThatWasHit.WhatIam == "Ground_Wall")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
+                    else if (GridThatWasHit.WhatIam == "Ground_Wall")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
 
-					else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
-				}
+                    else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                        hammerLeft++;
+                    }
+
+                }
 
 				//ConcreteCammer Adds Concreteblocks and Walls
 				else if (GetToolAction() == "Concrete") {
@@ -349,25 +378,40 @@ public class PlayerMove : NetworkBehaviour {
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
-					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+					if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+                        concreteLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+                        concreteLeft--;
+                    }
 
 
-					else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
 
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                        concreteLeft++;
+                    }
 
 
 
-					else if (GridThatWasHit.WhatIam == "Trench_Deep")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
-					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
-				}
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
+                        concreteLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+                        concreteLeft++;
+                    }
+                }
 
 
 
@@ -410,7 +454,7 @@ public class PlayerMove : NetworkBehaviour {
     }
 
 
-    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot, Grenadeboom };
+	public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot , RifleEmptySound};
     [ClientRpc]
 
 	/// <summary>
@@ -419,7 +463,7 @@ public class PlayerMove : NetworkBehaviour {
 	/// <param name="WhatToPlay">What to play.</param>
 	void RpcPlaySoundHere(SoundType WhatToPlay)
 	{
-        AudioClip[] clips = { ItemSwichSound, ShovelDigSound, PickAxeDigSound, HammerActionSound, ConcreteActionSound, RifleShootSound};
+		AudioClip[] clips = { ItemSwichSound, ShovelDigSound, PickAxeDigSound, HammerActionSound, ConcreteActionSound, RifleShootSound, RifleEmptySound};
         GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
 
 		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
