@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
-
     public GameObject bulletPrefab;
     public float jumpVelocity;
     public float gravity;
@@ -15,10 +14,9 @@ public class PlayerMove : NetworkBehaviour {
 
 
 	// INVENTORY
-	private string WhatToBuild = "Shovel";
-	public GameObject Shovel;
-	public GameObject PickAxe;
-	public GameObject Rifle;
+	private int WhatToBuild = 0;
+  public GameObject[] tools = new GameObject[]{};
+  public string[] toolActions = new string[]{};
 
 	// AUDIO
 	public GameObject SoundplayerPrefab;
@@ -28,8 +26,10 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip RifleShootSound;
 
 	void Start(){
-		PickAxe.SetActive (false);
-		Rifle.SetActive (false);
+    foreach (GameObject tool in tools) {
+		    tool.SetActive(false);
+    }
+    tools[WhatToBuild].SetActive(true);
 	}
 
     // Use this for initialization for the local player object
@@ -43,9 +43,9 @@ public class PlayerMove : NetworkBehaviour {
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
 
-		Shovel.transform.SetParent (cam.transform);
-		PickAxe.transform.SetParent (cam.transform);
-		Rifle.transform.SetParent (cam.transform);
+        foreach (GameObject tool in tools) {
+    		    tool.transform.SetParent (cam.transform);
+        }
 
     }
 
@@ -71,10 +71,11 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-		if (Input.GetMouseButtonDown(2))
-		{
-			this.CycleWhatToBuild ();
-		}
+      if (Input.mouseScrollDelta.y < 0) {
+    		this.CycleWhatToBuild(1);
+      } else if (Input.mouseScrollDelta.y > 0) {
+        this.CycleWhatToBuild(-1);
+      }
 
         mouse.LookRotation(transform, cam.transform);
         mouse.UpdateCursorLock();
@@ -96,7 +97,7 @@ public class PlayerMove : NetworkBehaviour {
         {
             gravVelocity -= gravity;
         }
-        Debug.Log(gravVelocity);
+        // Debug.Log(gravVelocity);
         return Vector3.up * gravVelocity;
     }
 
@@ -109,26 +110,20 @@ public class PlayerMove : NetworkBehaviour {
 
 	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
 	/// SHOULD THIS BE COMMAND TO SERveR?? (soo it looks to all the same??)
-	void CycleWhatToBuild()
+	void CycleWhatToBuild(int dir)
 	{
+    Debug.Log(WhatToBuild);
 		this.PlaySoundHere (ItemSwichSound);
-
-		if (WhatToBuild == "Shovel") {
-			WhatToBuild = "PickAxe";
-			PickAxe.SetActive (true);
-			Shovel.SetActive (false);
-		}
-		else if (WhatToBuild == "PickAxe"){
-			WhatToBuild = "Rifle";
-			Rifle.SetActive (true);
-			PickAxe.SetActive (false);
-		}
-		else if (WhatToBuild == "Rifle"){
-			WhatToBuild = "Shovel";
-			Shovel.SetActive (true);
-			Rifle.SetActive (false);
-		}
+    tools[WhatToBuild].SetActive(false);
+    WhatToBuild += dir;
+    WhatToBuild = mod(WhatToBuild, tools.Length);
+    tools[WhatToBuild].SetActive(true);
 	}
+
+  int mod(int x, int m) {
+      int r = x%m;
+      return r<0 ? r+m : r;
+  }
 
 	/// <summary>
 	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
@@ -140,24 +135,13 @@ public class PlayerMove : NetworkBehaviour {
 
 		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
 		SoundieSound.clip = WhatToPlay;
-	
+
 	}
 
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
     [Command]
     void CmdFire(Vector3 dir) {
-        // Create the bullet object locally
-        //GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + cam.transform.forward, Quaternion.identity);
-
-        // Make the bullet move away in front of the player
-        //bullet.GetComponent<Rigidbody>().velocity = cam.transform.forward * 4;
-
-        // Spawn the bullet on the clients
-        //NetworkServer.Spawn(bullet);
-
-        // When the bullet is destroyed on the server it will automaticaly be destroyed on clients
-        //Destroy(bullet, 2.0f);
         RpcShoot(dir);
     }
 
@@ -166,7 +150,8 @@ public class PlayerMove : NetworkBehaviour {
     {
         RaycastHit hit;
 
-		if (WhatToBuild == "Rifle") {
+        Debug.Log(toolActions[WhatToBuild]);
+		if (toolActions[WhatToBuild] == "Rifle") {
 
 			// TODO: ACTUAL SHOOTINGS!
 
@@ -179,14 +164,14 @@ public class PlayerMove : NetworkBehaviour {
 
 
 
-			if (hit.collider.GetComponentInParent<Grid> ()) 
+			if (hit.collider.GetComponentInParent<Grid> ())
 			{
 				//Playsound! *CHUNK*
 
 				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
 
 				//Pickaxe GOES DOWN
-				if (WhatToBuild == "PickAxe") {
+				if (toolActions[WhatToBuild] == "PickAxe") {
 
 					this.PlaySoundHere (PickAxeDigSound);
 
@@ -200,8 +185,8 @@ public class PlayerMove : NetworkBehaviour {
 				}
 
 				//Shovel goes  UP
-				else if (WhatToBuild == "Shovel") {
-					
+				else if (toolActions[WhatToBuild] == "Shovel") {
+
 					this.PlaySoundHere (ShovelDigSound);
 
 					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
@@ -211,7 +196,7 @@ public class PlayerMove : NetworkBehaviour {
 				}
 
 
-				
+
 			}
 		}
     }

@@ -391,9 +391,14 @@ MonoBehaviour:
     type: 2}
   jumpVelocity: 0.2
   gravity: 0.01
-  Shovel: {fileID: 1565202145866488}
-  PickAxe: {fileID: 1571368861302074}
-  Rifle: {fileID: 1917735500753308}
+  tools:
+  - {fileID: 1565202145866488}
+  - {fileID: 1571368861302074}
+  - {fileID: 1917735500753308}
+  toolActions:
+  - Shovel
+  - PickAxe
+  - Rifle
   SoundplayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
   ItemSwichSound: {fileID: 8300000, guid: ec402b69ed28d394bb1dc3d200d7ed67, type: 3}
   ShovelDigSound: {fileID: 8300000, guid: 43217f86ddc35b24e9115dc01c46bdfa, type: 3}
