@@ -16,12 +16,15 @@ public class PlayerMove : NetworkBehaviour {
     private float hold = 0;
     private bool leftButtonHeld = false;
 
-  public GameObject grenadePrefab;
+  	public GameObject grenadePrefab;
 
 	// INVENTORY
 	private int WhatToBuild = 0;
-  public GameObject[] tools = new GameObject[]{};
-  public string[] toolActions = new string[]{};
+  	public GameObject[] tools = new GameObject[]{};
+  	public string[] toolActions = new string[]{};
+
+	public int RifleDamage = 30;
+
 
 	// AUDIO
 	public GameObject SoundplayerPrefab;
@@ -33,6 +36,7 @@ public class PlayerMove : NetworkBehaviour {
 
 
 	public AudioClip RifleShootSound;
+
 
 	void Start(){
     foreach (GameObject tool in tools) {
@@ -86,7 +90,7 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
-					Debug.Log(hold);
+					//Debug.Log(hold);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -203,12 +207,25 @@ public class PlayerMove : NetworkBehaviour {
 		Debug.Log(toolActions[WhatToBuild]);
 		if (toolActions[WhatToBuild] == "Rifle") {
 
+
+
 			if (Physics.Raycast (transform.position, dir, out hit))
             {
                 if (hit.transform.tag == "Player")
                 {
-                    hit.transform.GetComponent<Combat>().TakeDamage(10, GetComponent<Combat>());
+					hit.transform.GetComponent<Combat>().TakeDamage(RifleDamage, GetComponent<Combat>());
                 }
+
+				else if (hit.transform.GetComponentInParent<Grid>())
+				{
+					Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
+
+					if (GridThatWasHit.Damage (RifleDamage)) {
+					
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
+					
+					}
+				}
             }
 
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
@@ -323,7 +340,7 @@ public class PlayerMove : NetworkBehaviour {
     }
 
 
-    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot };
+    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot, Grenadeboom };
     [ClientRpc]
 
 	/// <summary>
