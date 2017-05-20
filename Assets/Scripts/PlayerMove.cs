@@ -51,7 +51,7 @@ public class PlayerMove : NetworkBehaviour {
         cam.transform.localPosition = Vector3.zero;
 		cam.transform.localRotation = Quaternion.identity;
         mouse = new MouseLook();
-		mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
+		//mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
 
@@ -240,7 +240,7 @@ public class PlayerMove : NetworkBehaviour {
                 }
 
                 //Shovel goes  UP
-                else if (toolActions[WhatToBuild] == "Shovel") {
+                else if (toolActions[WhatToBuild] == "Shovel" && GridThatWasHit.isOccupied(RobotModel) == false) {
 
 					this.CmdPlaySoundHere (SoundType.ShovelDig);
 
