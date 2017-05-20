@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e3a55ea497d35d04895f52da13a11673
-timeCreated: 1495232999
+guid: a1c9358faa2b73147a9b95fedc3ed259
+timeCreated: 1495269442
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -10,7 +10,6 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube
-    4300002: TheShovel
     7400000: Default Take
     9500000: //RootNode
   materials:

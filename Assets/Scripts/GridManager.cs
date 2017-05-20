@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour {
 	public GameObject GRIDTEMPLATE;
 
 	public GameObject Ground;
+	public GameObject Ground_Grass;
 	public GameObject Trench_Low;
 	public GameObject Trench_Deep;
 
@@ -20,7 +21,7 @@ public class GridManager : MonoBehaviour {
 		{
 			for (int forY = 0; forY <= ScaleY*2; forY = forY +2)
 			{
-				Grid GRID_PIECE_GRIDDITY = this.CreateGrid (Ground, (this.transform.position + new Vector3 (forX, 0, forY)));
+				Grid GRID_PIECE_GRIDDITY = this.CreateGrid (Ground_Grass, (this.transform.position + new Vector3 (forX, 0, forY)));
 
 				GRID_PIECE_GRIDDITY.x = forX;
 				GRID_PIECE_GRIDDITY.y = forY;

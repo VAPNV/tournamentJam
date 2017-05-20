@@ -13,12 +13,23 @@ public class PlayerMove : NetworkBehaviour {
     private float gravVelocity;
     private CharacterController controller;
 
+
+	// INVENTORY
 	private string WhatToBuild = "Shovel";
 	public GameObject Shovel;
 	public GameObject PickAxe;
+	public GameObject Rifle;
+
+	// AUDIO
+	public GameObject SoundplayerPrefab;
+	public AudioClip ItemSwichSound;
+	public AudioClip ShovelDigSound;
+	public AudioClip PickAxeDigSound;
+	public AudioClip RifleShootSound;
 
 	void Start(){
 		PickAxe.SetActive (false);
+		Rifle.SetActive (false);
 	}
 
     // Use this for initialization for the local player object
@@ -31,6 +42,11 @@ public class PlayerMove : NetworkBehaviour {
         mouse = new MouseLook();
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
+
+		Shovel.transform.SetParent (cam.transform);
+		PickAxe.transform.SetParent (cam.transform);
+		Rifle.transform.SetParent (cam.transform);
+
     }
 
     // Update is called once per frame
@@ -92,20 +108,40 @@ public class PlayerMove : NetworkBehaviour {
     }
 
 	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
+	/// SHOULD THIS BE COMMAND TO SERveR?? (soo it looks to all the same??)
 	void CycleWhatToBuild()
 	{
+		this.PlaySoundHere (ItemSwichSound);
+
 		if (WhatToBuild == "Shovel") {
 			WhatToBuild = "PickAxe";
 			PickAxe.SetActive (true);
 			Shovel.SetActive (false);
 		}
 		else if (WhatToBuild == "PickAxe"){
+			WhatToBuild = "Rifle";
+			Rifle.SetActive (true);
+			PickAxe.SetActive (false);
+		}
+		else if (WhatToBuild == "Rifle"){
 			WhatToBuild = "Shovel";
 			Shovel.SetActive (true);
-			PickAxe.SetActive (false);
+			Rifle.SetActive (false);
 		}
 	}
 
+	/// <summary>
+	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
+	/// </summary>
+	/// <param name="WhatToPlay">What to play.</param>
+	void PlaySoundHere(AudioClip WhatToPlay)
+	{
+		GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
+
+		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
+		SoundieSound.clip = WhatToPlay;
+	
+	}
 
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
@@ -129,8 +165,19 @@ public class PlayerMove : NetworkBehaviour {
     void RpcShoot(Vector3 dir)
     {
         RaycastHit hit;
-		if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+
+		if (WhatToBuild == "Rifle") {
+
+			// TODO: ACTUAL SHOOTINGS!
+
+			this.PlaySoundHere (RifleShootSound);
+
+		}
+		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
 			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
+
+
+
 
 			if (hit.collider.GetComponentInParent<Grid> ()) 
 			{
@@ -140,20 +187,29 @@ public class PlayerMove : NetworkBehaviour {
 
 				//Pickaxe GOES DOWN
 				if (WhatToBuild == "PickAxe") {
+
+					this.PlaySoundHere (PickAxeDigSound);
+
 					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
 					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
 
 				}
 
 				//Shovel goes  UP
 				else if (WhatToBuild == "Shovel") {
+					
+					this.PlaySoundHere (ShovelDigSound);
+
 					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
 					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
 				}
+
 
 				
 			}
