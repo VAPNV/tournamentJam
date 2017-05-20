@@ -1,0 +1,15 @@
+-fences
+  -barbed wire
+  -electric fence
+-barbed wire
+-mines
+  -stakes with tripwire
+  -snares
+-trench
+-walls
+  -blast walls
+  -ha-ha
+-turrets
+  -minigun
+  -flamethrower
+-remote detonable c4
