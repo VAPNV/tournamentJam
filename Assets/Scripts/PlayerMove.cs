@@ -13,6 +13,8 @@ public class PlayerMove : NetworkBehaviour {
     private Camera cam;
     private float gravVelocity;
     private CharacterController controller;
+    private float hold = 0;
+    private bool leftButtonHeld = false;
 
   public GameObject grenadePrefab;
 
@@ -82,10 +84,26 @@ public class PlayerMove : NetworkBehaviour {
         {
             return;
         }
+        if (leftButtonHeld) {
+          hold += Time.deltaTime;
+					Debug.Log(hold);
+        }
         if (Input.GetMouseButtonDown(0))
         {
+					if (toolActions[WhatToBuild] == "Grenade") {
+            leftButtonHeld = true;
+          } else {
             CmdFire(cam.transform.forward);
-        }
+					}
+				} else if (Input.GetMouseButtonUp(0)) {
+          if (hold > 0) {
+            if (toolActions[WhatToBuild] == "Grenade") {
+              CmdThrowGrenade(cam.transform.forward);
+            }
+            leftButtonHeld = false;
+            hold = 0;
+          }
+				}
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
       if (Input.mouseScrollDelta.y < 0) {
@@ -147,6 +165,14 @@ public class PlayerMove : NetworkBehaviour {
         CmdShoot(dir);
     }
 
+    [Command]
+    void CmdThrowGrenade(Vector3 dir) {
+      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
+      grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
+      NetworkServer.Spawn(grenade);
+    }
+
     ///Cycles what can be build now. Short list for now! (once needs certain equipments??)
     [Command]
     void CmdCycleWhatToBuild(int dir)
@@ -188,13 +214,6 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
 
 		}
-	    else if (toolActions[WhatToBuild] == "Grenade") {
-	      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
-	      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
-	      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
-	      NetworkServer.Spawn(grenade);
-	      Destroy(grenade, 3.0f);
-	    }
 			else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
 				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
@@ -241,10 +260,10 @@ public class PlayerMove : NetworkBehaviour {
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
 					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
-					
+
 					else if (GridThatWasHit.WhatIam == "Ground_Wall")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
-					
+
 					else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 				}
@@ -259,11 +278,11 @@ public class PlayerMove : NetworkBehaviour {
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
 					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
-					
-					
+
+
 					else if (GridThatWasHit.WhatIam == "Ground_Concreteblock")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
-					
+
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 
@@ -271,11 +290,10 @@ public class PlayerMove : NetworkBehaviour {
 
 					else if (GridThatWasHit.WhatIam == "Trench_Deep")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
-					
 					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
 				}
-					
+
 
 
 
