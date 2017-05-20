@@ -17,7 +17,10 @@ public class Grid : MonoBehaviour {
 
 	public GameObject GridModel;
 
-	private 
+
+	public int Health = 100;
+	public int Armour = 10;
+	public GameObject BecomeThisAfterDeath;
 
 
 	// Use this for initialization
@@ -41,7 +44,22 @@ public class Grid : MonoBehaviour {
 
 		this.UpdateName ();
 	}
+
+	/// <summary>
+	/// Damages Grid. Returns TRUE if died!
+	/// </summary>
+	/// <param name="Amount">Amount.</param>
+	public bool Damage(int Amount)
+	{
+		this.Health = this.Health + Mathf.Min(0,(this.Armour - Amount));
+
+		if (Health < 0)
+			return true;
+
+		return false;
 	
+	
+	}
 
 	public void ChangeTo (GameObject WhatToChangeTo)
 	{
@@ -84,6 +102,7 @@ public class Grid : MonoBehaviour {
 		this.name = (x + ":" + y + ": " + WhatIam);
 
 	}
+
 
 
 }
