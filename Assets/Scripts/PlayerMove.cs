@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlayerMove : NetworkBehaviour {
 	public class KnockBackData {
@@ -102,6 +103,7 @@ public class PlayerMove : NetworkBehaviour {
         if (!isLocalPlayer) {
             return;
         }
+		GameObject.Find ("GrenadeSlider").GetComponent<Slider> ().value = hold / 0.75f;
         Vector3 move = Input.GetAxis("Vertical") * transform.forward + Input.GetAxis("Horizontal") * transform.right;
 				Vector3 knockback = new Vector3(0, 0, 0);
 
