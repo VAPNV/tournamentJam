@@ -50,9 +50,10 @@ public class Combat : NetworkBehaviour {
     // ClientRpc calls are sent from objects on the server to objects on clients
     [ClientRpc]
     void RpcRespawn() {
-        if (isLocalPlayer) {
-            // Move back to zero location
-            transform.position = Vector3.zero;
-        }
+        // Move back to zero location
+        NetworkStartPosition[] spawns = FindObjectsOfType<NetworkStartPosition>();
+        NetworkStartPosition spawn = spawns[Random.Range(0, spawns.Length - 1)];
+        transform.position = spawn.transform.position;
+        transform.rotation = spawn.transform.rotation;
     }
 }

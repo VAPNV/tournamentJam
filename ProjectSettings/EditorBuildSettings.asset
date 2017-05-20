@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/MenuScene.unity
     guid: f047aaba9605f4d9bb8bd4b349c4597e
   - enabled: 1
-    path: Assets/GRID.unity
+    path: Assets/GRID_Work.unity
     guid: 00000000000000000000000000000000
