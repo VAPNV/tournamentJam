@@ -184,6 +184,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1797266411894532
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4249380629436716}
+  m_Layer: 0
+  m_Name: Rifle_End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1899933073471302
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,7 +305,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4787682546106526}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
 --- !u!4 &4132677187852656
 Transform:
@@ -316,7 +331,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5000005, z: 2.5000005}
   m_Children: []
   m_Father: {fileID: 4787682546106526}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4219832762561668
 Transform:
@@ -346,6 +361,19 @@ Transform:
   m_Father: {fileID: 4052551043401332}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -122.15399, y: -166.401, z: 151.021}
+--- !u!4 &4249380629436716
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1797266411894532}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.092, z: 0.091}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4787682546106526}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4290042920145574
 Transform:
   m_ObjectHideFlags: 1
@@ -409,6 +437,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 224624009995553384}
+  - {fileID: 4249380629436716}
   - {fileID: 4133059244239516}
   - {fileID: 4128061539047642}
   m_Father: {fileID: 4052551043401332}
@@ -980,6 +1009,9 @@ MonoBehaviour:
   ConcreteActionSound: {fileID: 8300000, guid: 5eb0e82590c92d04e8c326cf8f025274, type: 3}
   HitDustCloud: {fileID: 1636926500400010, guid: 7f8d1c7d98e2e6d45a456503db3a4039,
     type: 2}
+  ShootingEffect: {fileID: 1874824198269266, guid: c4ade3069d88e0f4d8bd7d6409be7b6a,
+    type: 2}
+  RifleBarrelEnd: {fileID: 1797266411894532}
   RifleShootSound: {fileID: 8300000, guid: 419e23fa8869e2746874a2927ce35185, type: 3}
 --- !u!114 &114345775587542854
 MonoBehaviour:

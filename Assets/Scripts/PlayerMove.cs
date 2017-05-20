@@ -36,6 +36,8 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip ConcreteActionSound;
 
 	public GameObject HitDustCloud;
+	public GameObject ShootingEffect;
+	public GameObject RifleBarrelEnd;
 
 	public AudioClip RifleShootSound;
 
@@ -198,7 +200,7 @@ public class PlayerMove : NetworkBehaviour {
 		Debug.Log(toolActions[WhatToBuild]);
 		if (toolActions[WhatToBuild] == "Rifle") {
 
-
+			GameObject ShootEffect = (GameObject)Instantiate (ShootingEffect, RifleBarrelEnd.transform.position, this.transform.rotation);
 
 			if (Physics.Raycast (transform.position, dir, out hit))
             {
