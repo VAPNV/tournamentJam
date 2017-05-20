@@ -978,6 +978,8 @@ MonoBehaviour:
   PickAxeDigSound: {fileID: 8300000, guid: 2674914a9cc95584e890525e5ce49109, type: 3}
   HammerActionSound: {fileID: 8300000, guid: 0d3f51c75440f5a4db815678d0bbdfdd, type: 3}
   ConcreteActionSound: {fileID: 8300000, guid: 5eb0e82590c92d04e8c326cf8f025274, type: 3}
+  HitDustCloud: {fileID: 1636926500400010, guid: 7f8d1c7d98e2e6d45a456503db3a4039,
+    type: 2}
   RifleShootSound: {fileID: 8300000, guid: 419e23fa8869e2746874a2927ce35185, type: 3}
 --- !u!114 &114345775587542854
 MonoBehaviour:

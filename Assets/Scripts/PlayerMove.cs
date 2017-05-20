@@ -34,6 +34,7 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip HammerActionSound;
 	public AudioClip ConcreteActionSound;
 
+	public GameObject HitDustCloud;
 
 	public AudioClip RifleShootSound;
 
@@ -211,6 +212,8 @@ public class PlayerMove : NetworkBehaviour {
 
 			if (Physics.Raycast (transform.position, dir, out hit))
             {
+				GameObject DustCloud = (GameObject)Instantiate (HitDustCloud, hit.point, new Quaternion(0,0,0,0));
+
                 if (hit.transform.tag == "Player")
                 {
 					hit.transform.GetComponent<Combat>().TakeDamage(RifleDamage, GetComponent<Combat>());
@@ -285,19 +288,19 @@ public class PlayerMove : NetworkBehaviour {
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 				}
 
-				//ConcreteCammer Adds Concreteblocks and Walls
+				//ConcreteCammer Adds ConcreteCubes and Walls
 				else if (toolActions[WhatToBuild] == "Concrete") {
 
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
 
 					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
 					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
 
 
-					else if (GridThatWasHit.WhatIam == "Ground_Concreteblock")
+					else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
 
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")

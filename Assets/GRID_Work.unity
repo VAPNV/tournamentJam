@@ -17602,6 +17602,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3de3282ba8466f14288caa25a3154989, type: 3}
   m_IsPrefabParent: 0
+--- !u!1001 &1875337002
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 14.861907
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -12.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 24.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596576768212352, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7f8d1c7d98e2e6d45a456503db3a4039, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &1883823845 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 3de3282ba8466f14288caa25a3154989, type: 3}
