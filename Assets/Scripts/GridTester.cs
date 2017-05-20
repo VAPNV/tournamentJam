@@ -8,7 +8,7 @@ public class GridTester : MonoBehaviour {
 
 
 	void Start () {
-		GridToTest.GridModel = GridToTest.Mother.Ground;
+		GridToTest.GridModel = GridToTest.Mother.GetElementByName("Ground");
 	
 	
 	}

@@ -13,6 +13,8 @@ public class PlayerMove : NetworkBehaviour {
     private Camera cam;
     private float gravVelocity;
     private CharacterController controller;
+    private float hold = 0;
+    private bool leftButtonHeld = false;
 
   public GameObject grenadePrefab;
 
@@ -82,17 +84,36 @@ public class PlayerMove : NetworkBehaviour {
         {
             return;
         }
+        if (leftButtonHeld) {
+          hold += Time.deltaTime;
+					Debug.Log(hold);
+        }
         if (Input.GetMouseButtonDown(0))
         {
+					if (toolActions[WhatToBuild] == "Grenade") {
+            leftButtonHeld = true;
+          } else {
             CmdFire(cam.transform.forward);
-        }
+					}
+				} else if (Input.GetMouseButtonUp(0)) {
+          if (hold > 0) {
+            if (toolActions[WhatToBuild] == "Grenade") {
+              CmdThrowGrenade(cam.transform.forward);
+            }
+            leftButtonHeld = false;
+            hold = 0;
+          }
+				}
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
       if (Input.mouseScrollDelta.y < 0) {
     		this.CmdCycleWhatToBuild(1);
-      } else if (Input.mouseScrollDelta.y > 0) {
-        this.CmdCycleWhatToBuild(-1);
-      }
+            this.CmdPlaySoundHere(SoundType.ItemSwitch);
+        }
+        else if (Input.mouseScrollDelta.y > 0) {
+            this.CmdCycleWhatToBuild(-1);
+            this.CmdPlaySoundHere(SoundType.ItemSwitch);
+        }
 
         mouse.LookRotation(transform, cam.transform);
         mouse.UpdateCursorLock();
@@ -144,19 +165,38 @@ public class PlayerMove : NetworkBehaviour {
         CmdShoot(dir);
     }
 
-	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
-	void CmdCycleWhatToBuild(int dir)
+    [Command]
+    void CmdThrowGrenade(Vector3 dir) {
+      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
+      grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
+      NetworkServer.Spawn(grenade);
+    }
+
+    ///Cycles what can be build now. Short list for now! (once needs certain equipments??)
+    [Command]
+    void CmdCycleWhatToBuild(int dir)
 	{
-		Debug.Log(WhatToBuild);
-		this.CmdPlaySoundHere (ItemSwichSound);
-		tools[WhatToBuild].SetActive(false);
-		WhatToBuild += dir;
-		WhatToBuild = mod(WhatToBuild, tools.Length);
-		tools[WhatToBuild].SetActive(true);
-	}
+        RpcCycleTool(dir);
+    }
+
+    [ClientRpc]
+    void RpcCycleTool(int dir)
+    {
+        CycleTool(dir);
+    }
+
+    void CycleTool(int dir)
+    {
+        Debug.Log(WhatToBuild);
+        tools[WhatToBuild].SetActive(false);
+        WhatToBuild += dir;
+        WhatToBuild = mod(WhatToBuild, tools.Length);
+        tools[WhatToBuild].SetActive(true);
+    }
 
 
-	void CmdShoot(Vector3 dir)
+    void CmdShoot(Vector3 dir)
 	{
 		RaycastHit hit;
 
@@ -165,18 +205,11 @@ public class PlayerMove : NetworkBehaviour {
 
 			// TODO: ACTUAL SHOOTINGS!
 
-			this.CmdPlaySoundHere (RifleShootSound);
+			this.CmdPlaySoundHere (SoundType.RifleShoot);
 
 		}
-    else if (toolActions[WhatToBuild] == "Grenade") {
-      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
-      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
-      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
-      NetworkServer.Spawn(grenade);
-      Destroy(grenade, 3.0f);
-    }
-		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
-			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
+			else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 
 
@@ -190,94 +223,114 @@ public class PlayerMove : NetworkBehaviour {
 				//Pickaxe GOES DOWN
 				if (toolActions[WhatToBuild] == "PickAxe") {
 
-					this.CmdPlaySoundHere (PickAxeDigSound);
+					this.CmdPlaySoundHere (SoundType.PickAxeDig);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+                    if (GridThatWasHit.WhatIam == "Trench_Low")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+					else if (GridThatWasHit.WhatIam == "Ground_Grass")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
 
-				}
+                }
 
-				//Shovel goes  UP
-				else if (toolActions[WhatToBuild] == "Shovel") {
+                //Shovel goes  UP
+                else if (toolActions[WhatToBuild] == "Shovel") {
 
-					this.CmdPlaySoundHere (ShovelDigSound);
+					this.CmdPlaySoundHere (SoundType.ShovelDig);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-				}
+					if (GridThatWasHit.WhatIam == "Trench_Low")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
+                }
 
 				//Hammer Adds WOOD
 				else if (toolActions[WhatToBuild] == "Hammer") {
 
-					this.CmdPlaySoundHere (HammerActionSound);
+					this.CmdPlaySoundHere (SoundType.HammerAction);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_NS.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_WE);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_WE.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+					if (GridThatWasHit.WhatIam == "Ground_Grass")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+
+					else if (GridThatWasHit.WhatIam == "Ground_Wall")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
+
+					else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 				}
 
 				//ConcreteCammer Adds Concreteblocks and Walls
 				else if (toolActions[WhatToBuild] == "Concrete") {
 
-					this.CmdPlaySoundHere (ConcreteActionSound);
+					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteBlock.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteWall);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteWall.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
 
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep_Concreteblock);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep_Concreteblock.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+					if (GridThatWasHit.WhatIam == "Ground_Grass")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+
+
+					else if (GridThatWasHit.WhatIam == "Ground_Concreteblock")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+
+					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+
+
+
+					else if (GridThatWasHit.WhatIam == "Trench_Deep")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
+					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
 				}
 
 
 
-			}
+
+            }
 		}
 	}
 
-	void CmdPlaySoundHere(AudioClip WhatToPlay)
+    [Command]
+	void CmdPlaySoundHere(SoundType WhatToPlay)
 	{
-		GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
+        RpcPlaySoundHere(WhatToPlay);
+	}
+
+    [ClientRpc]
+    void RpcGridChanged(int x, int y, string gridType)
+    {
+        Grid place = null;
+        foreach (Grid grid in FindObjectsOfType<Grid>())
+            if (grid.x == x && grid.y == y)
+                place = grid;
+        if (place == null)
+            return;
+
+		Debug.Log ("Changing GRID of type " + gridType);
+
+        place.ChangeTo(place.Mother.GetElementByName(gridType));
+    }
+
+
+    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot };
+    [ClientRpc]
+
+	/// <summary>
+	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
+	/// </summary>
+	/// <param name="WhatToPlay">What to play.</param>
+	void RpcPlaySoundHere(SoundType WhatToPlay)
+	{
+        AudioClip[] clips = { ItemSwichSound, ShovelDigSound, PickAxeDigSound, HammerActionSound, ConcreteActionSound, RifleShootSound};
+        GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
 
 		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
-		SoundieSound.clip = WhatToPlay;
+		SoundieSound.clip = clips[(int)WhatToPlay];
 
 	}
-//
-//    [ClientRpc]
-//
-//	/// <summary>
-//	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
-//	/// </summary>
-//	/// <param name="WhatToPlay">What to play.</param>
-//	void RpcPlaySoundHere(AudioClip WhatToPlay)
-//	{
-//		GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
-//
-//		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
-//		SoundieSound.clip = WhatToPlay;
-//
-//	}
 }
