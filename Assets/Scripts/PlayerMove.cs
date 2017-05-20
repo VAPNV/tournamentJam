@@ -15,6 +15,8 @@ public class PlayerMove : NetworkBehaviour {
     private CharacterController controller;
     private float hold = 0;
     private bool leftButtonHeld = false;
+    [SyncVar]
+    public bool debug = false;
 
   	public GameObject grenadePrefab;
 
@@ -113,6 +115,13 @@ public class PlayerMove : NetworkBehaviour {
         if (!isLocalPlayer)
         {
             return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            fighting = !fighting;
+            WhatToBuild = 0;
+            debug = true;
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
