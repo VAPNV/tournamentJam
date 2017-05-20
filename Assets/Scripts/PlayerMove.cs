@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
+	
+	public MeshRenderer RobotModel;
 
     public GameObject bulletPrefab;
     public float jumpVelocity;
@@ -13,18 +15,51 @@ public class PlayerMove : NetworkBehaviour {
     private float gravVelocity;
     private CharacterController controller;
 
-	private string WhatToBuild = "Ground";
+
+	// INVENTORY
+	private int WhatToBuild = 0;
+  public GameObject[] tools = new GameObject[]{};
+  public string[] toolActions = new string[]{};
+
+	// AUDIO
+	public GameObject SoundplayerPrefab;
+	public AudioClip ItemSwichSound;
+	public AudioClip ShovelDigSound;
+	public AudioClip PickAxeDigSound;
+	public AudioClip RifleShootSound;
+
+	void Start(){
+    foreach (GameObject tool in tools) {
+		    tool.SetActive(false);
+    }
+    tools[WhatToBuild].SetActive(true);
+	}
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
-        GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.5f, 0.2f);
-        cam = Camera.main;
+
+		//this.RobotModel = GetComponent<MeshRenderer> ();
+
+		if (GetComponent<Combat>().team == Combat.Team.Orange)
+			RobotModel.material.color = Color.yellow;
+		else if (GetComponent<Combat>().team == Combat.Team.Blue)
+			RobotModel.material.color = Color.blue;
+		
+		cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = Vector3.zero;
-        cam.transform.localRotation = Quaternion.identity;
+		cam.transform.localRotation = Quaternion.identity;
         mouse = new MouseLook();
+		mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
+
+        foreach (GameObject tool in tools) {
+    		    tool.transform.SetParent (cam.transform);
+        }
+
+		cam.transform.localPosition = new Vector3(0,1,0);	//head goes UP!
+
     }
 
     // Update is called once per frame
@@ -49,10 +84,11 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-		if (Input.GetMouseButtonDown(2))
-		{
-			this.CycleWhatToBuild ();
-		}
+      if (Input.mouseScrollDelta.y < 0) {
+    		this.CmdCycleWhatToBuild(1);
+      } else if (Input.mouseScrollDelta.y > 0) {
+        this.CmdCycleWhatToBuild(-1);
+      }
 
         mouse.LookRotation(transform, cam.transform);
         mouse.UpdateCursorLock();
@@ -74,7 +110,7 @@ public class PlayerMove : NetworkBehaviour {
         {
             gravVelocity -= gravity;
         }
-        Debug.Log(gravVelocity);
+        // Debug.Log(gravVelocity);
         return Vector3.up * gravVelocity;
     }
 
@@ -85,57 +121,113 @@ public class PlayerMove : NetworkBehaviour {
         gravVelocity = jumpVelocity;
     }
 
-	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
-	void CycleWhatToBuild()
-	{
-		if (WhatToBuild == "Ground")
-			WhatToBuild = "Trench_Low";
-		else if (WhatToBuild == "Trench_Low")
-			WhatToBuild = "Trench_Deep";
-		else if (WhatToBuild == "Trench_Deep")
-			WhatToBuild = "Ground";
-	}
+
+  int mod(int x, int m) {
+      int r = x%m;
+      return r<0 ? r+m : r;
+  }
+
+	/// <summary>
+	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
+	/// </summary>
+	/// <param name="WhatToPlay">What to play.</param>
 
 
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
     [Command]
     void CmdFire(Vector3 dir) {
-        // Create the bullet object locally
-        //GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + cam.transform.forward, Quaternion.identity);
-
-        // Make the bullet move away in front of the player
-        //bullet.GetComponent<Rigidbody>().velocity = cam.transform.forward * 4;
-
-        // Spawn the bullet on the clients
-        //NetworkServer.Spawn(bullet);
-
-        // When the bullet is destroyed on the server it will automaticaly be destroyed on clients
-        //Destroy(bullet, 2.0f);
-        RpcShoot(dir);
+        CmdShoot(dir);
     }
 
-    [ClientRpc]
-    void RpcShoot(Vector3 dir)
-    {
-        RaycastHit hit;
-		if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
+	void CmdCycleWhatToBuild(int dir)
+	{
+		Debug.Log(WhatToBuild);
+		this.CmdPlaySoundHere (ItemSwichSound);
+		tools[WhatToBuild].SetActive(false);
+		WhatToBuild += dir;
+		WhatToBuild = mod(WhatToBuild, tools.Length);
+		tools[WhatToBuild].SetActive(true);
+	}
+
+
+	void CmdShoot(Vector3 dir)
+	{
+		RaycastHit hit;
+
+		Debug.Log(toolActions[WhatToBuild]);
+		if (toolActions[WhatToBuild] == "Rifle") {
+
+			// TODO: ACTUAL SHOOTINGS!
+
+			this.CmdPlaySoundHere (RifleShootSound);
+
+		}
+		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
 			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
-			if (hit.collider.GetComponentInParent<Grid> ()) 
+
+
+
+			if (hit.collider.GetComponentInParent<Grid> ())
 			{
+				//Playsound! *CHUNK*
+
 				Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
 
-				if (WhatToBuild == "Ground")
-				//if GridThatWasHit
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
-				else if (WhatToBuild == "Trench_Low")
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-				else if (WhatToBuild == "Trench_Deep")
-					GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+				//Pickaxe GOES DOWN
+				if (toolActions[WhatToBuild] == "PickAxe") {
 
-				
+					this.CmdPlaySoundHere (PickAxeDigSound);
+
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+
+				}
+
+				//Shovel goes  UP
+				else if (toolActions[WhatToBuild] == "Shovel") {
+
+					this.CmdPlaySoundHere (ShovelDigSound);
+
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+				}
+
+
+
 			}
 		}
-    }
+	}
+
+	void CmdPlaySoundHere(AudioClip WhatToPlay)
+	{
+		GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
+
+		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
+		SoundieSound.clip = WhatToPlay;
+
+	}
+//
+//    [ClientRpc]
+//
+//	/// <summary>
+//	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
+//	/// </summary>
+//	/// <param name="WhatToPlay">What to play.</param>
+//	void RpcPlaySoundHere(AudioClip WhatToPlay)
+//	{
+//		GameObject Soundie = (GameObject)Instantiate (SoundplayerPrefab, this.transform.position, this.transform.rotation);
+//
+//		AudioSource SoundieSound = Soundie.GetComponent<AudioSource> ();
+//		SoundieSound.clip = WhatToPlay;
+//
+//	}
 }

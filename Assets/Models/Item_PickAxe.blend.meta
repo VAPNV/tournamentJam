@@ -1,24 +1,16 @@
 fileFormatVersion: 2
-guid: 186ac0ea6aa39c946b9e30a8a19e1cfd
-timeCreated: 1495228663
+guid: bde7016f14eaaa24a92b86b31baedbde
+timeCreated: 1495232998
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Cube
-    100002: //RootNode
-    100004: WoodenRoof
-    400000: Cube
-    400002: //RootNode
-    400004: WoodenRoof
-    2300000: Cube
-    2300002: WoodenRoof
-    3300000: Cube
-    3300002: WoodenRoof
-    4300000: WoodenRoof
-    4300002: Cube
-    6400000: Cube
-    6400002: WoodenRoof
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
+    4300002: ThePickAxe
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -49,9 +41,9 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     importBlendShapes: 1
-    swapUVChannels: 1
+    swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
