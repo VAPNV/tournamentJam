@@ -393,7 +393,7 @@ public class PlayerMove : NetworkBehaviour {
 	}
 
     [ClientRpc]
-    void RpcGridChanged(int x, int y, string gridType)
+    public void RpcGridChanged(int x, int y, string gridType)
     {
         Grid place = null;
         foreach (Grid grid in FindObjectsOfType<Grid>())
