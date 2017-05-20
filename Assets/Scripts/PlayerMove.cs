@@ -19,6 +19,7 @@ public class PlayerMove : NetworkBehaviour {
   public GameObject grenadePrefab;
 
 	// INVENTORY
+    [SyncVar]
 	private int WhatToBuild = 0;
   public GameObject[] tools = new GameObject[]{};
   public string[] toolActions = new string[]{};
@@ -79,6 +80,11 @@ public class PlayerMove : NetworkBehaviour {
             RobotModel.material.color = Color.yellow;
         else if (GetComponent<Combat>().team == Combat.Team.Blue)
             RobotModel.material.color = Color.blue;
+        foreach (GameObject tool in tools)
+        {
+            tool.SetActive(false);
+        }
+        tools[WhatToBuild].SetActive(true);
         if (!isLocalPlayer)
         {
             return;
@@ -176,24 +182,9 @@ public class PlayerMove : NetworkBehaviour {
     [Command]
     void CmdCycleWhatToBuild(int dir)
 	{
-        RpcCycleTool(dir);
-    }
-
-    [ClientRpc]
-    void RpcCycleTool(int dir)
-    {
-        CycleTool(dir);
-    }
-
-    void CycleTool(int dir)
-    {
-        Debug.Log(WhatToBuild);
-        tools[WhatToBuild].SetActive(false);
         WhatToBuild += dir;
         WhatToBuild = mod(WhatToBuild, tools.Length);
-        tools[WhatToBuild].SetActive(true);
     }
-
 
     void CmdShoot(Vector3 dir)
 	{
