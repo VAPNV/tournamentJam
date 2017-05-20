@@ -4,6 +4,18 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
+	public class KnockBackData {
+		public float power;
+		public float radius;
+		public Vector3 source;
+		public float time;
+		public KnockBackData(float power, Vector3 source, float radius, float time) {
+			this.power = power;
+		 	this.source = source;
+			this.radius = radius;
+			this.time = time;
+		}
+	}
 
 	public MeshRenderer RobotModel;
 
@@ -17,6 +29,7 @@ public class PlayerMove : NetworkBehaviour {
     private bool leftButtonHeld = false;
 
   	public GameObject grenadePrefab;
+		private ArrayList knockbacks = new ArrayList();
 
 	// INVENTORY
     [SyncVar]
@@ -77,8 +90,22 @@ public class PlayerMove : NetworkBehaviour {
             return;
         }
         Vector3 move = Input.GetAxis("Vertical") * transform.forward + Input.GetAxis("Horizontal") * transform.right;
+				Vector3 knockback = new Vector3(0, 0, 0);
 
-        controller.Move(move * 0.1f + Gravity());
+				ArrayList toBeRemoved = new ArrayList();
+				foreach (KnockBackData data in knockbacks) {
+					data.time -= Time.fixedDeltaTime;
+					if (data.time < 0) {
+						toBeRemoved.Add(data);
+					}
+					Vector3 deflect = Vector3.Normalize(transform.position - data.source);
+					float pow = (data.power / 500) * (1 - (Vector3.Distance(transform.position, data.source) / data.radius));
+					knockback += deflect * pow;
+				}
+				foreach (KnockBackData data in toBeRemoved) {
+					knockbacks.Remove(data);
+				}
+        controller.Move(move * 0.1f + knockback + Gravity());
     }
 
     void Update()
@@ -98,7 +125,6 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
-					//Debug.Log(hold);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -131,6 +157,10 @@ public class PlayerMove : NetworkBehaviour {
         mouse.UpdateCursorLock();
     }
 
+		void KnockBack(KnockBackData arg) {
+			knockbacks.Add(arg);
+		}
+
     bool OnGround()
     {
         RaycastHit hit;
@@ -147,7 +177,6 @@ public class PlayerMove : NetworkBehaviour {
         {
             gravVelocity -= gravity;
         }
-        // Debug.Log(gravVelocity);
         return Vector3.up * gravVelocity;
     }
 
@@ -197,7 +226,6 @@ public class PlayerMove : NetworkBehaviour {
 	{
 		RaycastHit hit;
 
-		Debug.Log(toolActions[WhatToBuild]);
 		if (toolActions[WhatToBuild] == "Rifle") {
 
 			GameObject ShootEffect = (GameObject)Instantiate (ShootingEffect, RifleBarrelEnd.transform.position, this.transform.rotation);
@@ -216,9 +244,9 @@ public class PlayerMove : NetworkBehaviour {
 					Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
 
 					if (GridThatWasHit.Damage (RifleDamage)) {
-					
+
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
-					
+
 					}
 				}
             }

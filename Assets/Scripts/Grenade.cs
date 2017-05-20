@@ -20,12 +20,12 @@ public class Grenade : NetworkBehaviour {
 	void FixedUpdate () {
 			timer--;
 			if (timer <= 0) {
-			
+
 				this.CmdPlaySoundHere ();
 				Debug.Log ("SHOULD BOOM!");
 
 				Destroy(gameObject);
-				float radius = 100;
+				float radius = 15;
 				float power = 200;
 				Vector3 explosionPos = transform.position;
 				Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
@@ -33,12 +33,15 @@ public class Grenade : NetworkBehaviour {
 				{
 					Rigidbody rb = hit.GetComponent<Rigidbody>();
 
+					CharacterController controller = hit.GetComponent<CharacterController>();
 					if (rb != null) {
 						rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
+					} else if (controller != null) {
+						hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position, radius, 1));
 					}
 				}
 
-				
+
 
 				for (int n = 0; n < 100; n++) {
 					Vector3 dir = Random.insideUnitSphere + Vector3.up;
