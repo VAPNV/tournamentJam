@@ -1845,7 +1845,7 @@ MonoBehaviour:
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: MenuScene
-  m_OnlineScene: GRID_Schedule
+  m_OnlineScene: GRID_Work
   m_SpawnPrefabs:
   - {fileID: 1092094957561228, guid: eedabe6f6c1bcda4188bafb009bfa531, type: 2}
   - {fileID: 1289256275397940, guid: ead5341ebba6c1c42a3c37a9e0328490, type: 2}
