@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
-
+	
+	public MeshRenderer RobotModel;
     public GameObject bulletPrefab;
     public float jumpVelocity;
     public float gravity;
@@ -34,18 +35,28 @@ public class PlayerMove : NetworkBehaviour {
 
     // Use this for initialization for the local player object
     public override void OnStartLocalPlayer() {
-        GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.5f, 0.2f);
-        cam = Camera.main;
+
+		//this.RobotModel = GetComponent<MeshRenderer> ();
+
+		if (GetComponent<Combat>().team == Combat.Team.Orange)
+			RobotModel.material.color = Color.yellow;
+		else if (GetComponent<Combat>().team == Combat.Team.Blue)
+			RobotModel.material.color = Color.blue;
+		
+		cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = Vector3.zero;
-        cam.transform.localRotation = Quaternion.identity;
+		cam.transform.localRotation = Quaternion.identity;
         mouse = new MouseLook();
+		mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
 
 		Shovel.transform.SetParent (cam.transform);
 		PickAxe.transform.SetParent (cam.transform);
 		Rifle.transform.SetParent (cam.transform);
+
+		cam.transform.localPosition = new Vector3(0,1,0);	//head goes UP!
 
     }
 
