@@ -56,7 +56,7 @@ MonoBehaviour:
   WhatIam: NOTHING
   Mother: {fileID: 0}
   GridModel: {fileID: 0}
-  Health: 100
+  Health: 10
   Armour: 10
   BecomeThisAfterDeath: {fileID: 1912201870375046, guid: 9ce6d8eccdaf79a439542619cb33d903,
     type: 2}
