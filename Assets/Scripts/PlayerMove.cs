@@ -86,8 +86,10 @@ public class PlayerMove : NetworkBehaviour {
             Jump();
       if (Input.mouseScrollDelta.y < 0) {
     		this.CmdCycleWhatToBuild(1);
+            if (!isServer)   CycleTool(1);
       } else if (Input.mouseScrollDelta.y > 0) {
         this.CmdCycleWhatToBuild(-1);
+            if (!isServer)  CycleTool(-1);
       }
 
         mouse.LookRotation(transform, cam.transform);
@@ -140,19 +142,25 @@ public class PlayerMove : NetworkBehaviour {
         CmdShoot(dir);
     }
 
-	///Cycles what can be build now. Short list for now! (once needs certain equipments??)
-	void CmdCycleWhatToBuild(int dir)
+    ///Cycles what can be build now. Short list for now! (once needs certain equipments??)
+    [Command]
+    void CmdCycleWhatToBuild(int dir)
 	{
-		Debug.Log(WhatToBuild);
-		this.CmdPlaySoundHere (ItemSwichSound);
-		tools[WhatToBuild].SetActive(false);
-		WhatToBuild += dir;
-		WhatToBuild = mod(WhatToBuild, tools.Length);
-		tools[WhatToBuild].SetActive(true);
-	}
+        CycleTool(dir);
+    }
+
+    void CycleTool(int dir)
+    {
+        Debug.Log(WhatToBuild);
+        this.CmdPlaySoundHere(ItemSwichSound);
+        tools[WhatToBuild].SetActive(false);
+        WhatToBuild += dir;
+        WhatToBuild = mod(WhatToBuild, tools.Length);
+        tools[WhatToBuild].SetActive(true);
+    }
 
 
-	void CmdShoot(Vector3 dir)
+    void CmdShoot(Vector3 dir)
 	{
 		RaycastHit hit;
 
@@ -181,29 +189,34 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (PickAxeDigSound);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+                    if (GridThatWasHit.WhatIam == "TRENCH_LOW")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_DEEP");
+						//GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
+					else if (GridThatWasHit.WhatIam == "GROUND_STANDARD")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
+                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+                    else if (GridThatWasHit.WhatIam == "GROUND_Muddy")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
+                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
 
-				}
+                }
 
-				//Shovel goes  UP
-				else if (toolActions[WhatToBuild] == "Shovel") {
+                //Shovel goes  UP
+                else if (toolActions[WhatToBuild] == "Shovel") {
 
 					this.CmdPlaySoundHere (ShovelDigSound);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Low.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-				}
+					if (GridThatWasHit.WhatIam == "TRENCH_LOW")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "GROUND_Muddy");
+                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+                    else if (GridThatWasHit.WhatIam == "TRENCH_DEEP")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
+                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+                }
 
 
 
-			}
+            }
 		}
 	}
 
@@ -215,6 +228,18 @@ public class PlayerMove : NetworkBehaviour {
 		SoundieSound.clip = WhatToPlay;
 
 	}
+
+    [ClientRpc]
+    void RpcGridChanged(int x, int y, string gridType)
+    {
+        Grid place = null;
+        foreach (Grid grid in FindObjectsOfType<Grid>())
+            if (grid.x == x && grid.y == y)
+                place = grid;
+        if (place == null)
+            return;
+        place.ChangeTo(place.Mother.GetElementByName(gridType));
+    }
 //
 //    [ClientRpc]
 //

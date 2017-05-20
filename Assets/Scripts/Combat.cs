@@ -23,7 +23,7 @@ public class Combat : NetworkBehaviour {
 
 	public void Update()
 	{
-		Debug.Log (health);
+		//Debug.Log (health);
 	}
 
 	public void TakeDamage(int amount, Combat shooter) {
