@@ -82,6 +82,15 @@ public class Grid : MonoBehaviour {
 		//other.CreateNew
 	}
 
+
+    //Check if this particular grid is occupied by a given player mesh
+    public bool isOccupied(MeshRenderer source)
+    {
+        return source.GetComponent<Renderer>().bounds.Contains(this.GridModel.transform.position);
+    }
+
+    
+
 	public void CycleType ()
 	{
 
