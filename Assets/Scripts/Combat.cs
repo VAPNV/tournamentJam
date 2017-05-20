@@ -7,7 +7,7 @@ public class Combat : NetworkBehaviour {
 
     public const int maxHealth = 100;
     public bool destroyOnDeath;
-	public enum Team 
+	public enum Team
 	{
 		Orange, Blue, None,
 	}
@@ -29,7 +29,7 @@ public class Combat : NetworkBehaviour {
 	public void TakeDamage(int amount, Combat shooter) {
         if (!isServer)
             return;
-//		if (team != shooter.team) 
+//		if (team != shooter.team)
 //		{
 			health -= amount;
 //		}

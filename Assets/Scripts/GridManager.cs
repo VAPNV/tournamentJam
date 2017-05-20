@@ -58,6 +58,12 @@ public class GridManager : MonoBehaviour {
 
 		Grid GRID_PIECE_GRIDDITY = GRID_PIECE.GetComponent<Grid> ();
 
+		foreach (Transform AlaOsuus in GRID_PIECE.GetComponentsInChildren<Transform>()) {
+		
+			AlaOsuus.rotation = this.transform.rotation;
+		
+		}
+
 		//GRID_PIECE_GRIDDITY.gameObject.AddComponent(TypeToChange) as GameObject;
 
 	//	GameObject NewLook = GRID_PIECE_GRIDDITY.gameObject.AddComponent("GameObject") as GameObject;
