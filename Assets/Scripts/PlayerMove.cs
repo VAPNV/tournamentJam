@@ -26,6 +26,10 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip ItemSwichSound;
 	public AudioClip ShovelDigSound;
 	public AudioClip PickAxeDigSound;
+	public AudioClip HammerActionSound;
+	public AudioClip ConcreteActionSound;
+
+
 	public AudioClip RifleShootSound;
 
 	void Start(){
@@ -199,6 +203,45 @@ public class PlayerMove : NetworkBehaviour {
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
 					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+				}
+
+				//Hammer Adds WOOD
+				else if (toolActions[WhatToBuild] == "Hammer") {
+
+					this.CmdPlaySoundHere (HammerActionSound);
+
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
+					
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_NS.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_WE);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_WE.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+				}
+
+				//ConcreteCammer Adds Concreteblocks and Walls
+				else if (toolActions[WhatToBuild] == "Concrete") {
+
+					this.CmdPlaySoundHere (ConcreteActionSound);
+
+					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
+					
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteBlock.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteWall);
+					
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteWall.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep_Concreteblock);
+					
+					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep_Concreteblock.name)
+						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
 				}
 
 

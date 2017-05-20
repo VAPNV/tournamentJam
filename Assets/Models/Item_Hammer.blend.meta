@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 093c10c93aa84e24bbcf4a311952adad
-timeCreated: 1495283742
+guid: 5b27e525e190f17459b6c0fe5fc9b084
+timeCreated: 1495281381
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,8 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube
-    6400000: //RootNode
+    4300000: ThePickAxe
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -41,10 +40,10 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0

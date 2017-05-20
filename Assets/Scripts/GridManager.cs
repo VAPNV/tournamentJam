@@ -11,8 +11,13 @@ public class GridManager : MonoBehaviour {
 
 	public GameObject Ground;
 	public GameObject Ground_Grass;
+	public GameObject Ground_WoodWall_NS;
+	public GameObject Ground_WoodWall_WE;
+	public GameObject Ground_ConcreteBlock;
+	public GameObject Ground_ConcreteWall;
 	public GameObject Trench_Low;
 	public GameObject Trench_Deep;
+	public GameObject Trench_Deep_Concreteblock;
 
 	// Use this for initialization
 	void Start () {
@@ -48,6 +53,12 @@ public class GridManager : MonoBehaviour {
 		GRID_PIECE.transform.parent = this.transform;
 
 		Grid GRID_PIECE_GRIDDITY = GRID_PIECE.GetComponent<Grid> ();
+
+		foreach (Transform AlaOsuus in GRID_PIECE.GetComponentsInChildren<Transform>()) {
+		
+			AlaOsuus.rotation = this.transform.rotation;
+		
+		}
 
 		//GRID_PIECE_GRIDDITY.gameObject.AddComponent(TypeToChange) as GameObject;
 
