@@ -226,7 +226,7 @@ public class PlayerMove : NetworkBehaviour {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
                 }
 
-				/*//Hammer Adds WOOD
+				//Hammer Adds WOOD
 				else if (toolActions[WhatToBuild] == "Hammer") {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
@@ -261,14 +261,15 @@ public class PlayerMove : NetworkBehaviour {
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 
+
+
 					else if (GridThatWasHit.WhatIam == "Trench_Deep")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
 					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep_Concreteblock.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
-				}*/
 					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+				}
+					
 
 
 
