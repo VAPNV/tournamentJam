@@ -6,7 +6,8 @@ public class Menu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = GetComponent<NetworkManager>();
-	}
+        PlayerPrefs.SetInt("team", 0);
+    }
 
 	public void StartServer()
 	{
@@ -24,6 +25,11 @@ public class Menu : MonoBehaviour {
 	{
 		manager.networkAddress = serverIp;
 	}
+
+    public void SetTeam(int team)
+    {
+        PlayerPrefs.SetInt("team", team);
+    }
 
 
 }

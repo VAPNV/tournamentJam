@@ -46,11 +46,6 @@ public class PlayerMove : NetworkBehaviour {
 
 		//this.RobotModel = GetComponent<MeshRenderer> ();
 
-		if (GetComponent<Combat>().team == Combat.Team.Orange)
-			RobotModel.material.color = Color.yellow;
-		else if (GetComponent<Combat>().team == Combat.Team.Blue)
-			RobotModel.material.color = Color.blue;
-
 		cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = Vector3.zero;
@@ -80,6 +75,10 @@ public class PlayerMove : NetworkBehaviour {
 
     void Update()
     {
+        if (GetComponent<Combat>().team == Combat.Team.Orange)
+            RobotModel.material.color = Color.yellow;
+        else if (GetComponent<Combat>().team == Combat.Team.Blue)
+            RobotModel.material.color = Color.blue;
         if (!isLocalPlayer)
         {
             return;
