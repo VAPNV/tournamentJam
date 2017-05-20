@@ -19,17 +19,38 @@ public class GridManager : MonoBehaviour {
 	public GameObject Trench_Deep;
 	public GameObject Trench_Deep_Concreteblock;
 
+	public GameObject MapEdge;
+
+	public GameObject Flag_Blue;
+	public GameObject Flag_Orange;
+
 	// Use this for initialization
 	void Start () {
 
-		for (int forX = 0; forX <= ScaleX*2; forX = forX +2)
+		// Create the MAP
+		for (int forX = -2; forX <= ScaleX*2+2; forX = forX +2)
 		{
-			for (int forY = 0; forY <= ScaleY*2; forY = forY +2)
+			for (int forY = -2; forY <= ScaleY*2+2; forY = forY +2)
 			{
-				Grid GRID_PIECE_GRIDDITY = this.CreateGrid (Ground_Grass, (this.transform.position + new Vector3 (forX, 0, forY)));
+				Grid GRID_PIECE_GRIDDITY;
 
+				//EDGECHECK FIRST
+				if (forX == -2 || forX == ScaleX * 2 + 2) {
+					GRID_PIECE_GRIDDITY = this.CreateGrid (MapEdge, (this.transform.position + new Vector3 (forX, 0, forY)));
+				} else if (forY == -2 || forY == ScaleY * 2 + 2) {
+					GRID_PIECE_GRIDDITY = this.CreateGrid (MapEdge, (this.transform.position + new Vector3 (forX, 0, forY)));
+				} else {
+					GRID_PIECE_GRIDDITY = this.CreateGrid (Ground_Grass, (this.transform.position + new Vector3 (forX, 0, forY)));
+				}
 				GRID_PIECE_GRIDDITY.x = forX;
 				GRID_PIECE_GRIDDITY.y = forY;
+
+				if ((forX == ScaleX*2) & (forY == ScaleY)) {
+					GameObject GRID_PIECE = (GameObject)Instantiate (Flag_Blue, (this.transform.position + new Vector3 (forX, 0, forY)), this.transform.rotation);
+				}
+				else if ((forX == 0) & (forY == ScaleY)) {
+					GameObject GRID_PIECE = (GameObject)Instantiate (Flag_Orange, (this.transform.position + new Vector3 (forX, 0, forY)), this.transform.rotation);
+				}
 			}
 		}
 

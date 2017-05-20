@@ -168,15 +168,15 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (RifleShootSound);
 
 		}
-    else if (toolActions[WhatToBuild] == "Grenade") {
-      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
-      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
-      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
-      NetworkServer.Spawn(grenade);
-      Destroy(grenade, 3.0f);
-    }
-		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
-			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
+	    else if (toolActions[WhatToBuild] == "Grenade") {
+	      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+	      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
+	      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
+	      NetworkServer.Spawn(grenade);
+	      Destroy(grenade, 3.0f);
+	    }
+			else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 
 
