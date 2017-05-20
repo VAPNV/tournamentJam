@@ -4,11 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
-<<<<<<< HEAD
 	
 	public MeshRenderer RobotModel;
-=======
->>>>>>> afaee4eec8530342046ce8eef9aeb01c9407ed93
+
     public GameObject bulletPrefab;
     public float jumpVelocity;
     public float gravity;

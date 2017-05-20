@@ -118,9 +118,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4290042920145574}
-  - {fileID: 4787682546106526}
   - {fileID: 4236051743912806}
   - {fileID: 4632036922145882}
+  - {fileID: 4787682546106526}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -135,7 +135,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 4052551043401332}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -122.15399, y: -166.401, z: 151.021}
 --- !u!4 &4290042920145574
 Transform:
@@ -161,7 +161,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 4052551043401332}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -122.15399, y: -166.401, z: 151.021}
 --- !u!4 &4787682546106526
 Transform:
@@ -174,7 +174,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 4052551043401332}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23365730488976626
 MeshRenderer:
@@ -256,7 +256,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a1c1a0eb4343a224b9d9f4a5ea5ce69d, type: 2}
+  - {fileID: 2100000, guid: 67265b6e28279914e8ecc530cdf13f6b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
