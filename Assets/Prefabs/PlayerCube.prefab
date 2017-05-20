@@ -158,6 +158,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1928303950398854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4550144364707610}
+  - component: {fileID: 33425411830671900}
+  - component: {fileID: 23096538147828904}
+  - component: {fileID: 95050309277254696}
+  m_Layer: 0
+  m_Name: Item_Grenade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1973542960866104
 GameObject:
   m_ObjectHideFlags: 1
@@ -191,6 +209,7 @@ Transform:
   - {fileID: 4940269487598000}
   - {fileID: 4219832762561668}
   - {fileID: 4787682546106526}
+  - {fileID: 4550144364707610}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -261,6 +280,19 @@ Transform:
   m_Father: {fileID: 4219832762561668}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4550144364707610
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928303950398854}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.483, y: -0.386, z: 1.102}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 4052551043401332}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4632036922145882
 Transform:
   m_ObjectHideFlags: 1
@@ -300,6 +332,38 @@ Transform:
   m_Father: {fileID: 4052551043401332}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -122.15399, y: -166.401, z: 151.021}
+--- !u!23 &23096538147828904
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928303950398854}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: ada6f0a3e6c23f4409c195c78b008e4f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!23 &23365730488976626
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -568,6 +632,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1072235516767070}
   m_Mesh: {fileID: 4300000, guid: 5b27e525e190f17459b6c0fe5fc9b084, type: 3}
+--- !u!33 &33425411830671900
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928303950398854}
+  m_Mesh: {fileID: 4300000, guid: a62c0fe2b67df1d4f9bf3c3af731b628, type: 3}
 --- !u!33 &33445399600938600
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -643,6 +714,23 @@ Animator:
   m_GameObject: {fileID: 1664758295093090}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 230bfc400e926c845a129bf2a73667fb, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95050309277254696
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928303950398854}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: a62c0fe2b67df1d4f9bf3c3af731b628, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -752,22 +840,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RobotModel: {fileID: 23527425904230198}
-  bulletPrefab: {fileID: 1092094957561228, guid: eedabe6f6c1bcda4188bafb009bfa531,
-    type: 2}
   jumpVelocity: 0.2
   gravity: 0.01
+  grenadePrefab: {fileID: 1092094957561228, guid: 6c2bfccc836340e40a3ca1c26ba53b51,
+    type: 2}
   tools:
   - {fileID: 1565202145866488}
   - {fileID: 1571368861302074}
   - {fileID: 1072235516767070}
   - {fileID: 1138003608792514}
   - {fileID: 1917735500753308}
+  - {fileID: 1928303950398854}
   toolActions:
   - Shovel
   - PickAxe
   - Hammer
   - Concrete
   - Rifle
+  - Grenade
   SoundplayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
   ItemSwichSound: {fileID: 8300000, guid: ec402b69ed28d394bb1dc3d200d7ed67, type: 3}
   ShovelDigSound: {fileID: 8300000, guid: 43217f86ddc35b24e9115dc01c46bdfa, type: 3}

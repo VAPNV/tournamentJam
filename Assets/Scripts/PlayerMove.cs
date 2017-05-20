@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerMove : NetworkBehaviour {
-	
+
 	public MeshRenderer RobotModel;
 
-    public GameObject bulletPrefab;
     public float jumpVelocity;
     public float gravity;
     private MouseLook mouse;
@@ -15,6 +14,7 @@ public class PlayerMove : NetworkBehaviour {
     private float gravVelocity;
     private CharacterController controller;
 
+  public GameObject grenadePrefab;
 
 	// INVENTORY
 	private int WhatToBuild = 0;
@@ -48,7 +48,7 @@ public class PlayerMove : NetworkBehaviour {
 			RobotModel.material.color = Color.yellow;
 		else if (GetComponent<Combat>().team == Combat.Team.Blue)
 			RobotModel.material.color = Color.blue;
-		
+
 		cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = Vector3.zero;
@@ -168,6 +168,13 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (RifleShootSound);
 
 		}
+    else if (toolActions[WhatToBuild] == "Grenade") {
+      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
+      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
+      NetworkServer.Spawn(grenade);
+      Destroy(grenade, 3.0f);
+    }
 		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
 			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 

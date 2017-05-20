@@ -36,3 +36,7 @@ sysinfo.txt
 /game_Data/
 *.exe
 ProjectSettings/ProjectVersion.txt
+Assets/Prefabs/ShotGun.prefab
+Assets/Prefabs/ShotGun.prefab
+Assets/Prefabs/Shot.prefab.meta
+Assets/Prefabs/ShotGun.prefab.meta
