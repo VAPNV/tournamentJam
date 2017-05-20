@@ -45,7 +45,7 @@ public class Grid : MonoBehaviour {
 
 	public void ChangeTo (GameObject WhatToChangeTo)
 	{
-		Mother.CreateGrid (WhatToChangeTo, this.transform.position);
+		Mother.CreateGrid (WhatToChangeTo, this.transform.position, this);
 		Destroy (this.gameObject);
 
 		//this.GridModel = WhatToChangeTo;
@@ -67,7 +67,7 @@ public class Grid : MonoBehaviour {
 	public void CycleType ()
 	{
 
-		this.ChangeTo (Mother.Trench_Low);
+		this.ChangeTo (Mother.GetElementByName("TRENCH_LOW"));
 
 //		if (GridModel == Mother.Ground)
 //			this.ChangeTo (Mother.Trench_Low);

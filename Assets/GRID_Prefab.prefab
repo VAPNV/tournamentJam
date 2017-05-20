@@ -53,5 +53,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  WhatIam: NOTHING
   Mother: {fileID: 0}
   GridModel: {fileID: 0}

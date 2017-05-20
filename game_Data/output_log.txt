@@ -15,14 +15,74 @@ Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll (
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.021 seconds
+- Completed reload, in  0.024 seconds
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.768446 ms
+UnloadTime: 1.960446 ms
+DontDestroyOnLoad only work for root GameObjects or components on root GameObjects.
+ 
+(Filename:  Line: 462)
+
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 34e4 -> priority: 1 
-  Thread -> id: 37f0 -> priority: 1 
+  Thread -> id: 23c8 -> priority: 1 
+  Thread -> id: 47b0 -> priority: 1 
+0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+PickAxe
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+PickAxe
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Shovel
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Shovel
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+PickAxe
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+PickAxe
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+

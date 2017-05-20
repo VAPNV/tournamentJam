@@ -9,15 +9,7 @@ public class GridManager : MonoBehaviour {
 
 	public GameObject GRIDTEMPLATE;
 
-	public GameObject Ground;
-	public GameObject Ground_Grass;
-	public GameObject Ground_WoodWall_NS;
-	public GameObject Ground_WoodWall_WE;
-	public GameObject Ground_ConcreteBlock;
-	public GameObject Ground_ConcreteWall;
-	public GameObject Trench_Low;
-	public GameObject Trench_Deep;
-	public GameObject Trench_Deep_Concreteblock;
+	public GameObject[] ElementTypes;
 
 	public GameObject MapEdge;
 
@@ -36,12 +28,15 @@ public class GridManager : MonoBehaviour {
 
 				//EDGECHECK FIRST
 				if (forX == -2 || forX == ScaleX * 2 + 2) {
-					GRID_PIECE_GRIDDITY = this.CreateGrid (MapEdge, (this.transform.position + new Vector3 (forX, 0, forY)));
+					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Map_Edge"), (this.transform.position + new Vector3 (forX, 0, forY)));
 				} else if (forY == -2 || forY == ScaleY * 2 + 2) {
-					GRID_PIECE_GRIDDITY = this.CreateGrid (MapEdge, (this.transform.position + new Vector3 (forX, 0, forY)));
+					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Map_Edge"), (this.transform.position + new Vector3 (forX, 0, forY)));
 				} else {
-					GRID_PIECE_GRIDDITY = this.CreateGrid (Ground_Grass, (this.transform.position + new Vector3 (forX, 0, forY)));
+					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Ground_Grass"), (this.transform.position + new Vector3 (forX, 0, forY)));
 				}
+
+				//Grid GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("GROUND_STANDARD"), (this.transform.position + new Vector3 (forX, 0, forY)));
+
 				GRID_PIECE_GRIDDITY.x = forX;
 				GRID_PIECE_GRIDDITY.y = forY;
 
@@ -56,7 +51,7 @@ public class GridManager : MonoBehaviour {
 
 	}
 
-	public void CreateGrid (GameObject TypeToChange, Vector3 NewGridLocation, Grid OldGrid)
+    /*public void CreateGrid (GameObject TypeToChange, Vector3 NewGridLocation, Grid OldGrid)
 	{
 
 		Grid NewGrid = this.CreateGrid (TypeToChange, NewGridLocation);
@@ -66,9 +61,21 @@ public class GridManager : MonoBehaviour {
 
 		NewGrid.UpdateName ();
 
-	}
+	}*/
 
-	public Grid CreateGrid (GameObject TypeToChange, Vector3 NewGridLocation)
+    public Grid CreateGrid(GameObject TypeToChange, Vector3 NewGridLocation)
+    {
+        GameObject GRID_PIECE = (GameObject)Instantiate(GRIDTEMPLATE, NewGridLocation, this.transform.rotation);
+        GRID_PIECE.transform.parent = this.transform;
+
+        Grid GRID_PIECE_GRIDDITY = GRID_PIECE.GetComponent<Grid>();
+
+        GRID_PIECE_GRIDDITY.UseThisModel(TypeToChange);
+
+        return GRID_PIECE_GRIDDITY;
+    }
+
+    public Grid CreateGrid (GameObject TypeToChange, Vector3 NewGridLocation, Grid OldGrid)
 	{
 		GameObject GRID_PIECE = (GameObject)Instantiate (GRIDTEMPLATE, NewGridLocation, this.transform.rotation);
 		GRID_PIECE.transform.parent = this.transform;
@@ -87,15 +94,16 @@ public class GridManager : MonoBehaviour {
 
 		GRID_PIECE_GRIDDITY.UseThisModel (TypeToChange);
 
-		//GameObject NewLook = GRID_PIECE.AddComponent<GameObject>();
+        //GameObject NewLook = GRID_PIECE.AddComponent<GameObject>();
+
+        GRID_PIECE_GRIDDITY.x = OldGrid.x;
+        GRID_PIECE_GRIDDITY.y = OldGrid.y;
 
 
+        //GRID_PIECE_GRIDDITY.ChangeTo (Type);
 
 
-		//GRID_PIECE_GRIDDITY.ChangeTo (Type);
-
-
-		return GRID_PIECE_GRIDDITY;
+        return GRID_PIECE_GRIDDITY;
 	}
 
 	// Update is called once per frame
@@ -103,7 +111,13 @@ public class GridManager : MonoBehaviour {
 		
 	}
 
-
+    public GameObject GetElementByName(string name)
+    {
+        foreach (GameObject type in ElementTypes)
+            if (type.name == name)
+                return type;
+        return null;
+    }
 
 
 
