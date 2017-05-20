@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour {
 	public int y;
 		// these could be inherited from transform but meh
 
-	string WhatIam = "Ground";
+	public string WhatIam = "NOTHING";
 	public GridManager Mother;
 
 	public GameObject GridModel;
@@ -22,22 +22,64 @@ public class Grid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.UpdateName();
-
 		Mother = this.GetComponentInParent<GridManager>();	//Insert check which FAILS ROAYALLY IF THIS DOES NOT WORK!
-	}
-	
 
-	void ChangeTo (GameObject WhatToChangeTo)
-	{
-		this.GridModel = WhatToChangeTo;
 
-		WhatIam = WhatToChangeTo.name;
 
 		this.UpdateName ();
 	}
 
-	void UpdateName()
+	public void UseThisModel (GameObject ModelToUse)
+	{
+		
+		GridModel = (GameObject)Instantiate (ModelToUse, (this.transform.position + new Vector3(0, 0, 0)), this.transform.rotation);
+		GridModel.transform.parent = this.transform;
+
+
+		this.WhatIam = ModelToUse.name;
+
+
+		this.UpdateName ();
+	}
+	
+
+	public void ChangeTo (GameObject WhatToChangeTo)
+	{
+		Mother.CreateGrid (WhatToChangeTo, this.transform.position);
+		Destroy (this.gameObject);
+
+		//this.GridModel = WhatToChangeTo;
+//
+//		GameObject NewModel = (GameObject)Instantiate (WhatToChangeTo, (this.transform.position + new Vector3(0, 0, 0)), this.transform.rotation);
+//		NewModel.transform.parent = this.transform;
+//		Destroy (GridModel);
+//
+//		this.GridModel = NewModel;
+//
+//		WhatIam = GridModel.name;
+//
+//		this.UpdateName ();
+
+
+		//other.CreateNew
+	}
+
+	public void CycleType ()
+	{
+
+		this.ChangeTo (Mother.Trench_Low);
+
+//		if (GridModel == Mother.Ground)
+//			this.ChangeTo (Mother.Trench_Low);
+//		else if (GridModel == Mother.Trench_Low)
+//			this.ChangeTo (Mother.Trench_Deep);
+//		else if (GridModel == Mother.Trench_Deep)
+//			this.ChangeTo (Mother.Ground);
+			
+		this.UpdateName ();
+	}
+
+	public void UpdateName()
 	{
 		this.name = (x + ":" + y + ": " + WhatIam);
 

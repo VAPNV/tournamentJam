@@ -1,29 +1,24 @@
 fileFormatVersion: 2
-guid: 098ea08ee4822784899c2a3c1eb80612
-timeCreated: 1495219342
+guid: 186ac0ea6aa39c946b9e30a8a19e1cfd
+timeCreated: 1495228663
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Cube
-    100002: Cube_001
-    100004: //RootNode
-    100006: ConcreteBlock
+    100002: //RootNode
+    100004: WoodenRoof
     400000: Cube
-    400002: Cube_001
-    400004: //RootNode
-    400006: ConcreteBlock
+    400002: //RootNode
+    400004: WoodenRoof
     2300000: Cube
-    2300002: Cube_001
-    2300004: ConcreteBlock
+    2300002: WoodenRoof
     3300000: Cube
-    3300002: Cube_001
-    3300004: ConcreteBlock
-    4300000: Cube_001
+    3300002: WoodenRoof
+    4300000: WoodenRoof
     4300002: Cube
-    4300004: ConcreteBlock
-    6400000: ConcreteBlock
-    6400002: Cube
+    6400000: Cube
+    6400002: WoodenRoof
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -56,7 +51,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 1
     importBlendShapes: 1
-    swapUVChannels: 0
+    swapUVChannels: 1
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
