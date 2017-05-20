@@ -19,6 +19,7 @@ public class PlayerMove : NetworkBehaviour {
   	public GameObject grenadePrefab;
 
 	// INVENTORY
+    [SyncVar]
 	private int WhatToBuild = 0;
   	public GameObject[] tools = new GameObject[]{};
   	public string[] toolActions = new string[]{};
@@ -51,17 +52,12 @@ public class PlayerMove : NetworkBehaviour {
 
 		//this.RobotModel = GetComponent<MeshRenderer> ();
 
-		if (GetComponent<Combat>().team == Combat.Team.Orange)
-			RobotModel.material.color = Color.yellow;
-		else if (GetComponent<Combat>().team == Combat.Team.Blue)
-			RobotModel.material.color = Color.blue;
-
 		cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = Vector3.zero;
 		cam.transform.localRotation = Quaternion.identity;
         mouse = new MouseLook();
-		mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
+		//mouse.MaximumX = 43;	// so that vision does not clip with model + GAMEPLAY EFFECT
         mouse.Init(transform, cam.transform);
         controller = GetComponent<CharacterController>();
 
@@ -85,6 +81,15 @@ public class PlayerMove : NetworkBehaviour {
 
     void Update()
     {
+        if (GetComponent<Combat>().team == Combat.Team.Orange)
+            RobotModel.material.color = Color.yellow;
+        else if (GetComponent<Combat>().team == Combat.Team.Blue)
+            RobotModel.material.color = Color.blue;
+        foreach (GameObject tool in tools)
+        {
+            tool.SetActive(false);
+        }
+        tools[WhatToBuild].SetActive(true);
         if (!isLocalPlayer)
         {
             return;
@@ -182,24 +187,9 @@ public class PlayerMove : NetworkBehaviour {
     [Command]
     void CmdCycleWhatToBuild(int dir)
 	{
-        RpcCycleTool(dir);
-    }
-
-    [ClientRpc]
-    void RpcCycleTool(int dir)
-    {
-        CycleTool(dir);
-    }
-
-    void CycleTool(int dir)
-    {
-        Debug.Log(WhatToBuild);
-        tools[WhatToBuild].SetActive(false);
         WhatToBuild += dir;
         WhatToBuild = mod(WhatToBuild, tools.Length);
-        tools[WhatToBuild].SetActive(true);
     }
-
 
     void CmdShoot(Vector3 dir)
 	{
@@ -261,7 +251,7 @@ public class PlayerMove : NetworkBehaviour {
                 }
 
                 //Shovel goes  UP
-                else if (toolActions[WhatToBuild] == "Shovel") {
+                else if (toolActions[WhatToBuild] == "Shovel" && GridThatWasHit.isOccupied(RobotModel) == false) {
 
 					this.CmdPlaySoundHere (SoundType.ShovelDig);
 

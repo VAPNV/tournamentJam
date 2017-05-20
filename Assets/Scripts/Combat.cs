@@ -21,7 +21,15 @@ public class Combat : NetworkBehaviour {
 	[SyncVar]
 	public Team team;
 
-	public void Update()
+    public override void OnStartLocalPlayer()
+    {
+        if (PlayerPrefs.GetInt("team") == 0)
+            team = Team.Orange;
+        if (PlayerPrefs.GetInt("team") == 1)
+            team = Team.Blue;
+    }
+
+    public void Update()
 	{
 		//Debug.Log (health);
 	}
