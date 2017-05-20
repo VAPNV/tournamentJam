@@ -45,9 +45,15 @@ public class PlayerMove : NetworkBehaviour {
 
 	public int RifleDamage = 30;
 
+    [SyncVar]
+    public int grenadesLeft;
+    [SyncVar]
+    public int hammerLeft;
+    [SyncVar]
+    public int concreteLeft;
 
-	// AUDIO
-	public GameObject SoundplayerPrefab;
+    // AUDIO
+    public GameObject SoundplayerPrefab;
 	public AudioClip ItemSwichSound;
 	public AudioClip ShovelDigSound;
 	public AudioClip PickAxeDigSound;
@@ -157,15 +163,18 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (Input.GetMouseButtonDown(0))
         {
-					if (GetToolAction() == "Grenade") {
+		    if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
             leftButtonHeld = true;
           } else {
             CmdFire(cam.transform.forward);
 					}
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
-            if (GetToolAction() == "Grenade") {
+            if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
               CmdThrowGrenade(cam.transform.forward);
+                    grenadesLeft--;
+                    if (grenadesLeft <= 0)
+                        CmdCycleWhatToBuild(1);
             }
             leftButtonHeld = false;
             hold = 0;
@@ -331,17 +340,27 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
-					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                    if (GridThatWasHit.WhatIam == "Ground_Grass" && hammerLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                        hammerLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy" && hammerLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+                        hammerLeft--;
+                    }
 
-					else if (GridThatWasHit.WhatIam == "Ground_Wall")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
+                    else if (GridThatWasHit.WhatIam == "Ground_Wall")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
 
-					else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
-				}
+                    else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                        hammerLeft++;
+                    }
+
+                }
 
 				//ConcreteCammer Adds Concreteblocks and Walls
 				else if (GetToolAction() == "Concrete") {
@@ -349,25 +368,40 @@ public class PlayerMove : NetworkBehaviour {
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
-					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+					if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+                        concreteLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
+                        concreteLeft--;
+                    }
 
 
-					else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
 
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                        concreteLeft++;
+                    }
 
 
 
-					else if (GridThatWasHit.WhatIam == "Trench_Deep")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
-					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
-				}
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
+                        concreteLeft--;
+                    }
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+                        concreteLeft++;
+                    }
+                }
 
 
 
