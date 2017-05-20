@@ -177,7 +177,13 @@ public class PlayerMove : NetworkBehaviour {
 		Debug.Log(toolActions[WhatToBuild]);
 		if (toolActions[WhatToBuild] == "Rifle") {
 
-			// TODO: ACTUAL SHOOTINGS!
+			if (Physics.Raycast (transform.position, dir, out hit))
+            {
+                if (hit.transform.tag == "Player")
+                {
+                    hit.transform.GetComponent<Combat>().TakeDamage(10, GetComponent<Combat>());
+                }
+            }
 
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
 
