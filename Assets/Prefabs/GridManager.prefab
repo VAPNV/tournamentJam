@@ -112,7 +112,7 @@ MonoBehaviour:
   - {fileID: 1220069363667418, guid: 15df8216c11647d40b409bacb45e5f67, type: 2}
   - {fileID: 1769444918193264, guid: 807e169bb1869574da2de7aa9cf4c9c2, type: 2}
   - {fileID: 1219507864718352, guid: 9e23b40e6fcdc574c9dac11ebb2b74f5, type: 2}
-  MapEdge: {fileID: 1220069363667418, guid: 15df8216c11647d40b409bacb45e5f67, type: 2}
+  MapEdge: {fileID: 0}
   Flag_Blue: {fileID: 1589791933667332, guid: ad80453d64c05e9489f42ee8ce5a8986, type: 2}
   Flag_Orange: {fileID: 1938380808007070, guid: d2775f60b16c53143b5fa8fddfb46aca,
     type: 2}
