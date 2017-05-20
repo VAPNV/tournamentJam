@@ -16,7 +16,7 @@ public class PlayerMove : NetworkBehaviour {
     private float hold = 0;
     private bool leftButtonHeld = false;
 
-  public GameObject grenadePrefab;
+  	public GameObject grenadePrefab;
 
 	// INVENTORY
     [SyncVar]
@@ -27,6 +27,9 @@ public class PlayerMove : NetworkBehaviour {
     public GameObject[] fightTools = new GameObject[] { };
     public string[] toolActions = new string[]{};
 
+	public int RifleDamage = 30;
+
+
 	// AUDIO
 	public GameObject SoundplayerPrefab;
 	public AudioClip ItemSwichSound;
@@ -35,8 +38,12 @@ public class PlayerMove : NetworkBehaviour {
 	public AudioClip HammerActionSound;
 	public AudioClip ConcreteActionSound;
 
+	public GameObject HitDustCloud;
+	public GameObject ShootingEffect;
+	public GameObject RifleBarrelEnd;
 
 	public AudioClip RifleShootSound;
+
 
 	void Start(){
         foreach (GameObject tool in buildTools) {
@@ -109,7 +116,7 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
-					Debug.Log(hold);
+					//Debug.Log(hold);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -222,12 +229,27 @@ public class PlayerMove : NetworkBehaviour {
 		Debug.Log(GetToolAction());
 		if (GetToolAction() == "Rifle") {
 
-			if (Physics.Raycast (cam.transform.position, dir, out hit))
+			GameObject ShootEffect = (GameObject)Instantiate (ShootingEffect, RifleBarrelEnd.transform.position, this.transform.rotation);
+
+			if (Physics.Raycast (transform.position, dir, out hit))
             {
+				GameObject DustCloud = (GameObject)Instantiate (HitDustCloud, hit.point, new Quaternion(0,0,0,0));
+
                 if (hit.transform.tag == "Player")
                 {
-                    hit.transform.GetComponent<Combat>().TakeDamage(10, GetComponent<Combat>());
+					hit.transform.GetComponent<Combat>().TakeDamage(RifleDamage, GetComponent<Combat>());
                 }
+
+				else if (hit.transform.GetComponentInParent<Grid>())
+				{
+					Grid GridThatWasHit = hit.collider.GetComponentInParent<Grid>();
+
+					if (GridThatWasHit.Damage (RifleDamage)) {
+					
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
+					
+					}
+				}
             }
 
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
@@ -294,12 +316,12 @@ public class PlayerMove : NetworkBehaviour {
 
 
 					if (GridThatWasHit.WhatIam == "Ground_Grass")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
 					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
 
 
-					else if (GridThatWasHit.WhatIam == "Ground_Concreteblock")
+					else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
 
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
@@ -342,7 +364,7 @@ public class PlayerMove : NetworkBehaviour {
     }
 
 
-    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot };
+    public enum SoundType { ItemSwitch, ShovelDig, PickAxeDig, HammerAction, ConcreteAction, RifleShoot, Grenadeboom };
     [ClientRpc]
 
 	/// <summary>
