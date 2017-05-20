@@ -8,6 +8,8 @@ public class GameManager : NetworkBehaviour {
     public float buildTime;
     [SyncVar]
     private float buildTimeLeft;
+    [SyncVar]
+    private float fightText;
 	// Use this for initialization
 	void Start () {
         buildTimeLeft = buildTime;
@@ -22,6 +24,8 @@ public class GameManager : NetworkBehaviour {
             if (buildTimeLeft <= 4)
                 GameObject.Find("Announcement").GetComponent<Text>().text = "Fighting in " + (int)buildTimeLeft;
         }
+        if (fightText > 0)
+            GameObject.Find("Announcement").GetComponent<Text>().text = "FIGHT!";
         if (!isServer)
             return;
         if (buildTimeLeft < 0)
@@ -35,10 +39,13 @@ public class GameManager : NetworkBehaviour {
                 plr.fighting = true;
                 plr.WhatToBuild = mod(plr.WhatToBuild, plr.fighting ? plr.fightTools.Length : plr.buildTools.Length); ;
             }
+            fightText = 2;
         }
-        else
+        else if (buildTimeLeft > 0)
             buildTimeLeft -= Time.deltaTime;
-	}
+        if (fightText > 0)
+            fightText -= Time.deltaTime;
+    }
 
     int mod(int x, int m)
     {
