@@ -1,30 +1,36 @@
 fileFormatVersion: 2
-guid: 014142379b0c7ec44a44d50d665c76a7
-timeCreated: 1495280968
+guid: 5deeb3d7eb2a9614b8d11a74c4bc8f0c
+timeCreated: 1495312372
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Cube
-    100002: Cube_001
-    100004: //RootNode
-    100006: WoodWall
+    100002: //RootNode
+    100004: WallLeg1
+    100006: WallLeg2
+    100008: WoodWall
     400000: Cube
-    400002: Cube_001
-    400004: //RootNode
-    400006: WoodWall
+    400002: //RootNode
+    400004: WallLeg1
+    400006: WallLeg2
+    400008: WoodWall
     2300000: Cube
-    2300002: Cube_001
-    2300004: WoodWall
+    2300002: WallLeg1
+    2300004: WallLeg2
+    2300006: WoodWall
     3300000: Cube
-    3300002: Cube_001
-    3300004: WoodWall
-    4300000: Cube_001
-    4300002: Cube
-    4300004: WoodWall
+    3300002: WallLeg1
+    3300004: WallLeg2
+    3300006: WoodWall
+    4300000: WallLeg1
+    4300002: WoodWall
+    4300004: Cube
+    4300006: WallLeg2
     6400000: Cube
-    6400002: Cube_001
-    6400004: WoodWall
+    6400002: WallLeg1
+    6400004: WallLeg2
+    6400006: WoodWall
     7400000: Default Take
     9500000: //RootNode
   materials:
