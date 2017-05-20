@@ -182,15 +182,15 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (SoundType.RifleShoot);
 
 		}
-    else if (toolActions[WhatToBuild] == "Grenade") {
-      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
-      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
-      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
-      NetworkServer.Spawn(grenade);
-      Destroy(grenade, 3.0f);
-    }
-		else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
-			Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
+	    else if (toolActions[WhatToBuild] == "Grenade") {
+	      GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
+	      grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
+	      grenade.GetComponent<Rigidbody>().velocity = dir * 6;
+	      NetworkServer.Spawn(grenade);
+	      Destroy(grenade, 3.0f);
+	    }
+			else if (Physics.Raycast (transform.position, dir, out hit, 4)) {
+				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 
 
@@ -206,15 +206,12 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.PickAxeDig);
 
-                    if (GridThatWasHit.WhatIam == "TRENCH_LOW")
-                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_DEEP");
-						//GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
-					else if (GridThatWasHit.WhatIam == "GROUND_STANDARD")
-                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
-                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
-                    else if (GridThatWasHit.WhatIam == "GROUND_Muddy")
-                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
-                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+                    if (GridThatWasHit.WhatIam == "Trench_Low")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+					else if (GridThatWasHit.WhatIam == "Ground_Grass")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
+                    else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
 
                 }
 
@@ -223,12 +220,10 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.ShovelDig);
 
-					if (GridThatWasHit.WhatIam == "TRENCH_LOW")
-                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "GROUND_Muddy");
-                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
-                    else if (GridThatWasHit.WhatIam == "TRENCH_DEEP")
-                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "TRENCH_LOW");
-                    //GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Low);
+					if (GridThatWasHit.WhatIam == "Trench_Low")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+                    else if (GridThatWasHit.WhatIam == "Trench_Deep")
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
                 }
 
 				/*//Hammer Adds WOOD
@@ -236,15 +231,16 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_NS);
+					if (GridThatWasHit.WhatIam == "Ground_Grass")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
+					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall");
 					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_NS.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_WoodWall_WE);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_WoodWall_WE.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
+					else if (GridThatWasHit.WhatIam == "Ground_Wall")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Wall_ROT");
+					
+					else if (GridThatWasHit.WhatIam == "Ground_Wall_ROT")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 				}
 
 				//ConcreteCammer Adds Concreteblocks and Walls
@@ -252,23 +248,27 @@ public class PlayerMove : NetworkBehaviour {
 
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
-					if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_Grass.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteBlock);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteBlock.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground_ConcreteWall);
-					
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Ground_ConcreteWall.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Ground);
 
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep_Concreteblock);
+					if (GridThatWasHit.WhatIam == "Ground_Grass")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+					else if (GridThatWasHit.WhatIam == "Ground_Muddy")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Concreteblock");
+					
+					
+					else if (GridThatWasHit.WhatIam == "Ground_Concreteblock")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+					
+					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
+
+					else if (GridThatWasHit.WhatIam == "Trench_Deep")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
 					
 					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep_Concreteblock.name)
 						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
 				}*/
+					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
+						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
 
 
 
@@ -291,6 +291,9 @@ public class PlayerMove : NetworkBehaviour {
                 place = grid;
         if (place == null)
             return;
+
+		Debug.Log ("Changing GRID of type " + gridType);
+
         place.ChangeTo(place.Mother.GetElementByName(gridType));
     }
 
