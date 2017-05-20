@@ -32,10 +32,10 @@ public class Combat : NetworkBehaviour {
 
     public void Update()
 	{
-		if (isLocalPlayer)
-        {
-            GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
-        }
+//		if (isLocalPlayer)
+//        {
+//            GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
+//        }
 	}
 
 	public void TakeDamage(int amount, Combat shooter) {

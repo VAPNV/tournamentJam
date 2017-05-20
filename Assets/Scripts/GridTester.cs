@@ -16,8 +16,8 @@ public class GridTester : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-
-		if (GridToTest != null)
-			GridToTest.CycleType ();
+//
+//		if (GridToTest != null)
+//			GridToTest.CycleType ();
 	}
 }

@@ -251,8 +251,11 @@ public class PlayerMove : NetworkBehaviour {
 
 					if (GridThatWasHit.Damage (RifleDamage)) {
 					
+
+
+						//Debug.Log ("Grid Destroyed! It is changing to " + WhatToChangeTheBastardTo + " w health of " + NewHealthofTheBastard);
+
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
-					
 					}
 				}
             }
@@ -375,7 +378,7 @@ public class PlayerMove : NetworkBehaviour {
         if (place == null)
             return;
 
-		Debug.Log ("Changing GRID of type " + gridType);
+		Debug.Log ("Changing GRID " + place.x  + "-" + place.y  + " of type " + gridType);
 
         place.ChangeTo(place.Mother.GetElementByName(gridType));
     }

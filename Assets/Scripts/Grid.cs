@@ -34,6 +34,9 @@ public class Grid : MonoBehaviour {
 
 	public void UseThisModel (GameObject ModelToUse)
 	{
+
+
+
 		
 		GridModel = (GameObject)Instantiate (ModelToUse, (this.transform.position + new Vector3(0, 0, 0)), this.transform.rotation);
 		GridModel.transform.parent = this.transform;
@@ -91,20 +94,20 @@ public class Grid : MonoBehaviour {
 
     
 
-	public void CycleType ()
-	{
-
-		this.ChangeTo (Mother.GetElementByName("TRENCH_LOW"));
-
-//		if (GridModel == Mother.Ground)
-//			this.ChangeTo (Mother.Trench_Low);
-//		else if (GridModel == Mother.Trench_Low)
-//			this.ChangeTo (Mother.Trench_Deep);
-//		else if (GridModel == Mother.Trench_Deep)
-//			this.ChangeTo (Mother.Ground);
-			
-		this.UpdateName ();
-	}
+//	public void CycleType ()
+//	{
+//
+//		this.ChangeTo (Mother.GetElementByName("TRENCH_LOW"));
+//
+////		if (GridModel == Mother.Ground)
+////			this.ChangeTo (Mother.Trench_Low);
+////		else if (GridModel == Mother.Trench_Low)
+////			this.ChangeTo (Mother.Trench_Deep);
+////		else if (GridModel == Mother.Trench_Deep)
+////			this.ChangeTo (Mother.Ground);
+//			
+//		this.UpdateName ();
+//	}
 
 	public void UpdateName()
 	{
