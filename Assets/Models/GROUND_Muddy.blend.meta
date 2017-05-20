@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e3a55ea497d35d04895f52da13a11673
-timeCreated: 1495232999
+guid: f863b0d17ee520b4e81cb8f335a624e9
+timeCreated: 1495272411
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -10,7 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube
-    4300002: TheShovel
+    6400000: //RootNode
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -41,7 +41,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
