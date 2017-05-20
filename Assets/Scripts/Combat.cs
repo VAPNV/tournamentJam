@@ -24,10 +24,14 @@ public class Combat : NetworkBehaviour {
 
     public override void OnStartLocalPlayer()
     {
-        if (PlayerPrefs.GetInt("team") == 0)
-            team = Team.Orange;
-        if (PlayerPrefs.GetInt("team") == 1)
-            team = Team.Blue;
+		if (PlayerPrefs.GetInt ("team") == 0) {
+			team = Team.Orange;
+			GameObject.Find ("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(1.000f, 0.549f, 0.000f);
+		}
+		if (PlayerPrefs.GetInt ("team") == 1) {
+			team = Team.Blue;
+			GameObject.Find ("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(0.000f, 0.000f, 1.000f);
+		}
     }
 
     public void Update()
