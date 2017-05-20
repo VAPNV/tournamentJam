@@ -13,7 +13,7 @@ public class PlayerMove : NetworkBehaviour {
     private Camera cam;
     private float gravVelocity;
     private CharacterController controller;
-    private int hold = 0;
+    private float hold = 0;
     private bool leftButtonHeld = false;
 
   public GameObject grenadePrefab;
@@ -85,7 +85,8 @@ public class PlayerMove : NetworkBehaviour {
             return;
         }
         if (leftButtonHeld) {
-          hold++;
+          hold += Time.deltaTime;
+					Debug.Log(hold);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -168,7 +169,7 @@ public class PlayerMove : NetworkBehaviour {
     void CmdThrowGrenade(Vector3 dir) {
       GameObject grenade = (GameObject) Instantiate(grenadePrefab, tools[WhatToBuild].transform.position + dir, Quaternion.identity);
       grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
-      grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 150) / 150 * 16;
+      grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
       NetworkServer.Spawn(grenade);
     }
 
@@ -244,7 +245,7 @@ public class PlayerMove : NetworkBehaviour {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Low");
                 }
 
-				/*//Hammer Adds WOOD
+				//Hammer Adds WOOD
 				else if (toolActions[WhatToBuild] == "Hammer") {
 
 					this.CmdPlaySoundHere (SoundType.HammerAction);
@@ -279,14 +280,14 @@ public class PlayerMove : NetworkBehaviour {
 					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
 
+
+
 					else if (GridThatWasHit.WhatIam == "Trench_Deep")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep_ConcreteBlock");
-
-					else if (GridThatWasHit.WhatIam == GridThatWasHit.Mother.Trench_Deep_Concreteblock.name)
-						GridThatWasHit.ChangeTo (GridThatWasHit.Mother.Trench_Deep);
-				}*/
 					else if (GridThatWasHit.WhatIam == "Trench_Deep_ConcreteBlock")
 						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Trench_Deep");
+				}
+
 
 
 

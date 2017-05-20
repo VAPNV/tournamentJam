@@ -114,8 +114,12 @@ public class GridManager : MonoBehaviour {
     public GameObject GetElementByName(string name)
     {
         foreach (GameObject type in ElementTypes)
+        {
+            if (type == null)
+                continue;
             if (type.name == name)
                 return type;
+        }
         return null;
     }
 
