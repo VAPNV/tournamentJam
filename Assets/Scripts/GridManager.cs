@@ -39,6 +39,7 @@ public class GridManager : MonoBehaviour {
 					GRID_PIECE_GRIDDITY.Armour = 0;	//easy to destroy!
 				} else {
 					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Ground_Grass"), (this.transform.position + new Vector3 (forX, 0, forY)));
+					GRID_PIECE_GRIDDITY.Armour = 0;
 				}
 
 				//Grid GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("GROUND_STANDARD"), (this.transform.position + new Vector3 (forX, 0, forY)));
