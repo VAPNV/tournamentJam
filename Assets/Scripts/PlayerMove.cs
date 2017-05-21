@@ -19,6 +19,7 @@ public class PlayerMove : NetworkBehaviour {
 	}
 
 	public MeshRenderer RobotModel;
+	public GameObject AllTheRobotParts;
 
     public float jumpVelocity;
     public float gravity;
@@ -102,6 +103,11 @@ public class PlayerMove : NetworkBehaviour {
         {
             tool.transform.SetParent(cam.transform);
         }
+
+		foreach (MeshRenderer RobotModelPart in AllTheRobotParts.transform.GetComponentsInChildren<MeshRenderer>())
+		{
+			RobotModelPart.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+		}
 
         cam.transform.localPosition = new Vector3(0,1,0);	//head goes UP!
 
