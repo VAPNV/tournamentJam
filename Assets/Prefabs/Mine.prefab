@@ -126,7 +126,7 @@ MonoBehaviour:
   shrapnelPrefab: {fileID: 1092094957561228, guid: 4c31eca99873cb143aa978689071b5dc,
     type: 2}
   owner: {fileID: 0}
-  damage: 90
+  damage: 95
   toArm: 0.7
   BoomSound: {fileID: 8300000, guid: 73b1900637372264fbb900a24b3aad48, type: 3}
   SoundPlayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
