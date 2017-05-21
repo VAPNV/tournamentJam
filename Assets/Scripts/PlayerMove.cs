@@ -38,11 +38,13 @@ public class PlayerMove : NetworkBehaviour {
 
   	public GameObject grenadePrefab;
   	public GameObject minePrefab;
-		private ArrayList knockbacks = new ArrayList();
+		public ArrayList knockbacks = new ArrayList();
 
     //FLAG
     public bool playerIsHoldingFlag = false;
     public GameObject flag_ref;
+    public GameObject orangeFlagModel;
+    public GameObject blueFlagModel;
 
     // INVENTORY
     [SyncVar]
@@ -61,6 +63,8 @@ public class PlayerMove : NetworkBehaviour {
     public int hammerLeft;
     [SyncVar]
     public int concreteLeft;
+    [SyncVar]
+    public int minesLeft;
 
     // AUDIO
     public GameObject SoundplayerPrefab;
@@ -313,7 +317,10 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Mine") {
+		if (GetToolAction() == "Mine" && minesLeft > 0) {
+			minesLeft--;
+			if (minesLeft <= 0)
+					CmdCycleWhatToBuild(1);
 			GameObject mine = (GameObject) Instantiate(minePrefab, pos + dir, Quaternion.identity);
 			mine.GetComponent<Mine>().owner = GetComponent<Combat>();
 			mine.GetComponent<Rigidbody>().velocity = dir * 6;
@@ -521,11 +528,30 @@ public class PlayerMove : NetworkBehaviour {
     {
         this.playerIsHoldingFlag = val;
         flag_ref = flagRef;
+        toggleFlagOnPlayerVisibility(true, flag_ref.GetComponent<flag_Controller>().flag_team);
+    }
+
+
+    //Toggles the visibility of the flag on the player model
+    //Team_ID is the ID of the flag that was captured
+    public void toggleFlagOnPlayerVisibility(bool visible, Combat.Team team_ID)
+    {
+        if(team_ID == Combat.Team.Blue)
+        {
+            blueFlagModel.gameObject.SetActive(visible);
+        } else if (team_ID == Combat.Team.Orange)
+        {
+            orangeFlagModel.gameObject.SetActive(visible);
+        } else
+        {
+            Debug.Log("THIS SHOULD NOT HAPPEN!");
+        }
     }
 
     private void playerDropFlag() {
         flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
         playerIsHoldingFlag = false;
+        toggleFlagOnPlayerVisibility(false, flag_ref.GetComponent<flag_Controller>().flag_team);
         flag_ref = null;
     }
 }

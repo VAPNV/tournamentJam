@@ -11,7 +11,7 @@ public class flag_Controller : MonoBehaviour
     int flag_cooldown = 5; //Flag cooldown in seconds untiol it can be picked back up
     int flag_to_home_cooldown = 10;
 
-    Combat.Team flag_team;
+    public Combat.Team flag_team;
 
     bool flagOnCooldown = false;
     bool is_flag_home = true;
@@ -33,9 +33,9 @@ public class flag_Controller : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         //Are we colliding with a player=
-        if (col.name == "PlayerCube(Clone)")
+        
+        if (col.tag == "Player")
         {
-
             var target = col.gameObject.GetComponent<PlayerMove>();
 
             if (target.playerIsHoldingFlag && target.GetComponent<Combat>().team == flag_team)
@@ -43,6 +43,7 @@ public class flag_Controller : MonoBehaviour
                 Debug.Log("SCORE!");
                 target.playerIsHoldingFlag = false;
                 target.flag_ref.GetComponent<flag_Controller>().returnToStart();
+                target.toggleFlagOnPlayerVisibility(false, target.flag_ref.GetComponent<flag_Controller>().flag_team);
                 target.flag_ref = null;
             }
 

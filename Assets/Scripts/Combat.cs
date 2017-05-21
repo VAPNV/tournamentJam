@@ -49,7 +49,8 @@ public class Combat : NetworkBehaviour {
         {
             GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
             PlayerMove plr = GetComponent<PlayerMove>();
-           // Debug.Log(plr.grenadesLeft);
+
+            //Debug.Log(plr.grenadesLeft);
             GameObject.Find("AmmoText").GetComponent<Text>().text = "";
             if (plr.GetToolAction() == "Rifle")
 			    GameObject.Find ("AmmoText").GetComponent<Text> ().text = "AMMO: " + Ammo/15;
@@ -78,7 +79,7 @@ public class Combat : NetworkBehaviour {
 				this.GetScore (-1);
 			else
 				shooter.GetScore (1);
-	
+
             if (destroyOnDeath) {
                 Destroy(gameObject);
             } else {
@@ -106,6 +107,11 @@ public class Combat : NetworkBehaviour {
     // ClientRpc calls are sent from objects on the server to objects on clients
     [ClientRpc]
     public void RpcRespawn() {
+      PlayerMove p = GetComponent<PlayerMove>();
+      if (p != null) {
+        p.knockbacks.Clear();
+      }
+
         // Move back to zero location
         NetworkStartPosition[] spawns = FindObjectsOfType<NetworkStartPosition>();
         NetworkStartPosition spawn = spawns[Random.Range(0, spawns.Length - 1)];
