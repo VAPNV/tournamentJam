@@ -48,17 +48,16 @@ public class Grenade : NetworkBehaviour {
 			}
 			var hitCombat = hit.GetComponent<Combat>();
 			if (hitCombat != null) {
-				hitCombat.TakeDamage(damage * 2, shooter);
+				hitCombat.TakeDamage(damage, shooter);
 			}
 			if (hit.transform.GetComponentInParent<Grid>()) {
 				Grid GridThatWasHit = hit.GetComponent<Collider>().GetComponentInParent<Grid>();
 
-				if (GridThatWasHit.Damage (damage)) {
+				if (GridThatWasHit.Damage(damage * 2)) {
 					FindObjectsOfType<PlayerMove>()[0].RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
 				}
 			}
 		}
-
 
 
 		for (int n = 0; n < 100; n++) {
