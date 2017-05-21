@@ -28,31 +28,50 @@ public class Combat : NetworkBehaviour {
 
     public void Start()
     {
-        if (PlayerPrefs.GetInt("team") == 0)
+        Combat[] players = FindObjectsOfType<Combat>();
+        int oranges = 0;
+        int blues = 0;
+        foreach (Combat plr in players)
         {
+            if (plr.team == Team.Blue)
+                blues++;
+            if (plr.team == Team.Orange)
+                oranges++;
+        }
+        if (oranges < blues)
             team = Team.Orange;
-        }
-        if (PlayerPrefs.GetInt("team") == 1)
-        {
+        else if (blues < oranges)
             team = Team.Blue;
-        }
+        else
+            team = Team.Orange;
+
+        this.transform.SetParent(GameObject.Find("GameManager").transform);
+        if (team == Team.Blue)
+            this.name = "Blue-" + Random.Range(100, 999);
+        else if (GetComponent<Combat>().team == Combat.Team.Orange)
+            this.name = "Orange-" + Random.Range(100, 999);
+
+        GameObject.Find("NameText").GetComponent<Text>().text = this.name;
     }
 
     public override void OnStartLocalPlayer()
     {
-		if (PlayerPrefs.GetInt ("team") == 0) {
-			GameObject.Find ("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(1.000f, 0.549f, 0.000f);
-		}
-		if (PlayerPrefs.GetInt ("team") == 1) {
-			GameObject.Find ("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(0.000f, 0.000f, 1.000f);
-		}
     }
 
 
 
     public void Update()
 	{
-		if (Ammo<100)
+        if (team == Team.Orange)
+        {
+            GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(1.000f, 0.549f, 0.000f);
+        }
+        if (team == Team.Blue)
+        {
+            GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(0.000f, 0.000f, 1.000f);
+        }
+
+        if (Ammo<100)
 			Ammo++;
 
 		if (isLocalPlayer)
