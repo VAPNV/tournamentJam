@@ -939,7 +939,7 @@ MonoBehaviour:
   - Rifle
   - Grenade
   RifleDamage: 30
-  grenadesLeft: 1
+  grenadesLeft: 2
   hammerLeft: 10
   concreteLeft: 5
   SoundplayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
