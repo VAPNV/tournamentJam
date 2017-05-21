@@ -24,6 +24,7 @@ public class PlayerMove : NetworkBehaviour {
 
     public float jumpVelocity;
     public float gravity;
+    public float runSpeed;
     private MouseLook mouse;
     private Camera cam;
     private float gravVelocity;
@@ -80,6 +81,13 @@ public class PlayerMove : NetworkBehaviour {
 
 
 	void Start(){
+
+		this.transform.SetParent (GameObject.Find ("GameManager").transform);
+		if (GetComponent<Combat> ().team == Combat.Team.Blue)
+			this.name = "BLue Robot " +  Random.Range (100, 999);
+		else if (GetComponent<Combat> ().team == Combat.Team.Orange)
+			this.name = "Orange Robot " +  Random.Range (100, 999);
+
         foreach (GameObject tool in buildTools) {
 		        tool.SetActive(false);
         }
@@ -143,7 +151,7 @@ public class PlayerMove : NetworkBehaviour {
 				foreach (KnockBackData data in toBeRemoved) {
 					knockbacks.Remove(data);
 				}
-        controller.Move(move * 0.1f + knockback + Gravity());
+        controller.Move(move * runSpeed + knockback + Gravity());
     }
 
     void Update()
