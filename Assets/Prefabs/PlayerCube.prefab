@@ -1552,10 +1552,11 @@ MonoBehaviour:
   RifleModel: {fileID: 23365730488976626}
   jumpVelocity: 0.2
   gravity: 0.01
+  runSpeed: 0.3
   debug: 0
   grenadePrefab: {fileID: 1092094957561228, guid: 6c2bfccc836340e40a3ca1c26ba53b51,
     type: 2}
-  minePrefab: {fileID: 0}
+  minePrefab: {fileID: 1343613607856672, guid: 6050673a8c7b144478e9faf130972da3, type: 2}
   playerIsHoldingFlag: 0
   flag_ref: {fileID: 0}
   orangeFlagModel: {fileID: 1648954953494700}
@@ -1570,6 +1571,7 @@ MonoBehaviour:
   fightTools:
   - {fileID: 1917735500753308}
   - {fileID: 1928303950398854}
+  - {fileID: 1788105402110304}
   toolActions:
   - Shovel
   - PickAxe
@@ -1577,10 +1579,12 @@ MonoBehaviour:
   - Concrete
   - Rifle
   - Grenade
+  - Mine
   RifleDamage: 30
   grenadesLeft: 2
   hammerLeft: 10
   concreteLeft: 5
+  minesLeft: 3
   SoundplayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
   ItemSwichSound: {fileID: 8300000, guid: ec402b69ed28d394bb1dc3d200d7ed67, type: 3}
   ShovelDigSound: {fileID: 8300000, guid: 43217f86ddc35b24e9115dc01c46bdfa, type: 3}

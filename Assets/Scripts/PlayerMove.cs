@@ -24,6 +24,7 @@ public class PlayerMove : NetworkBehaviour {
 
     public float jumpVelocity;
     public float gravity;
+    public float runSpeed;
     private MouseLook mouse;
     private Camera cam;
     private float gravVelocity;
@@ -37,7 +38,7 @@ public class PlayerMove : NetworkBehaviour {
 
   	public GameObject grenadePrefab;
   	public GameObject minePrefab;
-		private ArrayList knockbacks = new ArrayList();
+		public ArrayList knockbacks = new ArrayList();
 
     //FLAG
     public bool playerIsHoldingFlag = false;
@@ -62,6 +63,8 @@ public class PlayerMove : NetworkBehaviour {
     public int hammerLeft;
     [SyncVar]
     public int concreteLeft;
+    [SyncVar]
+    public int minesLeft;
 
     // AUDIO
     public GameObject SoundplayerPrefab;
@@ -80,6 +83,13 @@ public class PlayerMove : NetworkBehaviour {
 
 
 	void Start(){
+
+		this.transform.SetParent (GameObject.Find ("GameManager").transform);
+		if (GetComponent<Combat> ().team == Combat.Team.Blue)
+			this.name = "BLue Robot " +  Random.Range (100, 999);
+		else if (GetComponent<Combat> ().team == Combat.Team.Orange)
+			this.name = "Orange Robot " +  Random.Range (100, 999);
+
         foreach (GameObject tool in buildTools) {
 		        tool.SetActive(false);
         }
@@ -143,7 +153,7 @@ public class PlayerMove : NetworkBehaviour {
 				foreach (KnockBackData data in toBeRemoved) {
 					knockbacks.Remove(data);
 				}
-        controller.Move(move * 0.1f + knockback + Gravity());
+        controller.Move(move * runSpeed + knockback + Gravity());
     }
 
     void Update()
@@ -307,7 +317,10 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Mine") {
+		if (GetToolAction() == "Mine" && minesLeft > 0) {
+			minesLeft--;
+			if (minesLeft <= 0)
+					CmdCycleWhatToBuild(1);
 			GameObject mine = (GameObject) Instantiate(minePrefab, pos + dir, Quaternion.identity);
 			mine.GetComponent<Mine>().owner = GetComponent<Combat>();
 			mine.GetComponent<Rigidbody>().velocity = dir * 6;
