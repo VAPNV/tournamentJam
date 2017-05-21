@@ -41,7 +41,7 @@ public class Grenade : NetworkBehaviour {
 			Rigidbody rb = hit.GetComponent<Rigidbody>();
 
 			CharacterController controller = hit.GetComponent<CharacterController>();
-			if (rb != null) {
+			if (rb != null && hit.tag != "Flag") {
 				rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
 			} else if (controller != null) {
 				hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position, radius, 1));

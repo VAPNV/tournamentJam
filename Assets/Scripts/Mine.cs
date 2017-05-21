@@ -47,7 +47,7 @@ public class Mine : NetworkBehaviour {
 			Rigidbody rb = hit.GetComponent<Rigidbody>();
 
 			CharacterController controller = hit.GetComponent<CharacterController>();
-			if (rb != null) {
+			if (rb != null && hit.tag != "Flag") {
 				rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
 			} else if (controller != null) {
 				hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position - new Vector3(0, -0.5f, 0), radius, 1.5f));
