@@ -1552,7 +1552,7 @@ MonoBehaviour:
   RifleModel: {fileID: 23365730488976626}
   jumpVelocity: 0.2
   gravity: 0.01
-  runSpeed: 0.3
+  runSpeed: 0.2
   debug: 0
   grenadePrefab: {fileID: 1092094957561228, guid: 6c2bfccc836340e40a3ca1c26ba53b51,
     type: 2}
@@ -1572,7 +1572,6 @@ MonoBehaviour:
   fightTools:
   - {fileID: 1917735500753308}
   - {fileID: 1928303950398854}
-  - {fileID: 1788105402110304}
   toolActions:
   - Shovel
   - PickAxe

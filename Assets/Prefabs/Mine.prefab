@@ -123,10 +123,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2af6f18a25a9004aa1cb8d40082aab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrapnelPrefab: {fileID: 1092094957561228, guid: 4c31eca99873cb143aa978689071b5dc,
+    type: 2}
   owner: {fileID: 0}
   damage: 120
   toArm: 0.7
-  BoomSound: {fileID: 8300000, guid: 73b1900637372264fbb900a24b3aad48, type: 3}
+  BoomSound: {fileID: 8300000, guid: c348885c00c664845b915603532e34b4, type: 3}
   SoundPlayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
 --- !u!114 &114762120785560808
 MonoBehaviour:
