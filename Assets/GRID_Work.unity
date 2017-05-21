@@ -9859,11 +9859,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 114315240119979456, guid: 8c5307ec6984ef645bf060472a6f81cb,
-        type: 2}
-      propertyPath: RifleShootSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 0bd5e8342f77d5147977044ead42eb37, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8c5307ec6984ef645bf060472a6f81cb, type: 2}
   m_IsPrefabParent: 0

@@ -20,6 +20,7 @@ public class PlayerMove : NetworkBehaviour {
 
 	public MeshRenderer RobotModel;
 	public GameObject AllTheRobotParts;
+	public MeshRenderer RifleModel;
 
     public float jumpVelocity;
     public float gravity;
@@ -144,10 +145,13 @@ public class PlayerMove : NetworkBehaviour {
 
     void Update()
     {
-        if (GetComponent<Combat>().team == Combat.Team.Orange)
-            RobotModel.material.color = Color.yellow;
-        else if (GetComponent<Combat>().team == Combat.Team.Blue)
-            RobotModel.material.color = Color.blue;
+		if (GetComponent<Combat> ().team == Combat.Team.Orange) {
+			RobotModel.material.color = Color.yellow;
+			RifleModel.material.color = Color.yellow;
+		} else if (GetComponent<Combat> ().team == Combat.Team.Blue) {
+			RobotModel.material.color = Color.blue;
+			RifleModel.material.color = Color.blue;
+		}
         foreach (GameObject tool in buildTools)
         {
             tool.SetActive(false);
