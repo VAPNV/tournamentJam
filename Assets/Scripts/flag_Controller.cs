@@ -58,6 +58,7 @@ public class flag_Controller : MonoBehaviour
                 else
                 {
                     CancelInvoke("return_to_base_CD");
+                    flag_to_home_cooldown = 10;
                 }
                 this.gameObject.SetActive(false);
             }
