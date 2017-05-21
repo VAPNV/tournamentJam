@@ -72,7 +72,10 @@ public class Combat : NetworkBehaviour {
 //		}
 
         if (health <= 0) {
-
+            if(shooter.GetComponent<PlayerMove>().playerIsHoldingFlag)
+            {
+                shooter.GetComponent<PlayerMove>().playerDropFlag();
+            }
 			GetComponentInParent<GameManager> ().AnnounceMessage (shooter.name + " killed " + this.name + "!");
 
 			if (shooter == this | shooter.team == this.team)
