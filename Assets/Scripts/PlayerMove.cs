@@ -37,7 +37,7 @@ public class PlayerMove : NetworkBehaviour {
 
   	public GameObject grenadePrefab;
   	public GameObject minePrefab;
-		private ArrayList knockbacks = new ArrayList();
+		public ArrayList knockbacks = new ArrayList();
 
     //FLAG
     public bool playerIsHoldingFlag = false;
@@ -60,6 +60,8 @@ public class PlayerMove : NetworkBehaviour {
     public int hammerLeft;
     [SyncVar]
     public int concreteLeft;
+    [SyncVar]
+    public int minesLeft;
 
     // AUDIO
     public GameObject SoundplayerPrefab;
@@ -305,7 +307,10 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Mine") {
+		if (GetToolAction() == "Mine" && minesLeft > 0) {
+			minesLeft--;
+			if (minesLeft <= 0)
+					CmdCycleWhatToBuild(1);
 			GameObject mine = (GameObject) Instantiate(minePrefab, pos + dir, Quaternion.identity);
 			mine.GetComponent<Mine>().owner = GetComponent<Combat>();
 			mine.GetComponent<Rigidbody>().velocity = dir * 6;

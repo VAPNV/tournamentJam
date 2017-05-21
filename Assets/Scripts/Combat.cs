@@ -90,6 +90,10 @@ public class Combat : NetworkBehaviour {
     // ClientRpc calls are sent from objects on the server to objects on clients
     [ClientRpc]
     void RpcRespawn() {
+      PlayerMove p = GetComponent<PlayerMove>();
+      if (p != null) {
+        p.knockbacks.Clear();
+      }
         // Move back to zero location
         TeamSpawn[] spawns = FindObjectsOfType<TeamSpawn>();
         TeamSpawn spawn = spawns[Random.Range(0, spawns.Length - 1)];

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class Mine : NetworkBehaviour {
+	public GameObject shrapnelPrefab;
 	public Combat owner;
 	public int damage;
 	public float toArm = 0.7f;
@@ -38,7 +39,7 @@ public class Mine : NetworkBehaviour {
 	public void CmdExplode() {
 		Destroy(gameObject);
 		float radius = 2;
-		float power = 400;
+		float power = 300;
 		Vector3 explosionPos = transform.position;
 		Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
 		foreach (Collider hit in colliders)
@@ -49,7 +50,7 @@ public class Mine : NetworkBehaviour {
 			if (rb != null) {
 				rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
 			} else if (controller != null) {
-				hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position, radius, 0.5f));
+				hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position - new Vector3(0, -0.5f, 0), radius, 1.5f));
 			}
 			var hitCombat = hit.GetComponent<Combat>();
 			if (hitCombat != null) {
@@ -62,6 +63,14 @@ public class Mine : NetworkBehaviour {
 					FindObjectsOfType<PlayerMove>()[0].RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
 				}
 			}
+		}
+		for (int n = 0; n < 10; n++) {
+			Vector3 dir = Random.insideUnitSphere + Vector3.up;
+			GameObject shrapnel = (GameObject) Instantiate(shrapnelPrefab, transform.position + dir, Quaternion.identity);
+			shrapnel.GetComponent<Bullet>().shooter = owner;
+			shrapnel.GetComponent<Rigidbody>().velocity = dir * 6;
+			NetworkServer.Spawn(shrapnel);
+			Destroy(shrapnel, 4);
 		}
 	}
 

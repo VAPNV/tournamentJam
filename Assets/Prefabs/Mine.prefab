@@ -123,6 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2af6f18a25a9004aa1cb8d40082aab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrapnelPrefab: {fileID: 1092094957561228, guid: 4c31eca99873cb143aa978689071b5dc,
+    type: 2}
   owner: {fileID: 0}
   damage: 50
   toArm: 0.7
