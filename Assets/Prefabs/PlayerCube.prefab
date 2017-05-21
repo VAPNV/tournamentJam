@@ -1568,7 +1568,6 @@ MonoBehaviour:
   - {fileID: 1571368861302074}
   - {fileID: 1072235516767070}
   - {fileID: 1138003608792514}
-  - {fileID: 1788105402110304}
   fightTools:
   - {fileID: 1917735500753308}
   - {fileID: 1928303950398854}
@@ -1577,10 +1576,8 @@ MonoBehaviour:
   - PickAxe
   - Hammer
   - Concrete
-  - Mine
   - Rifle
   - Grenade
-  - Mine
   RifleDamage: 30
   grenadesLeft: 2
   hammerLeft: 10
