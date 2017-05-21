@@ -4,8 +4,8 @@ using System.Collections;
 
 public class Hud : MonoBehaviour
 {
-	private int blue_score = 0;
-	private int orange_score = 0;
+	public int blue_score = 0;
+	public int orange_score = 0;
 	
 	// Update is called once per frame
 	void Update ()
@@ -14,8 +14,8 @@ public class Hud : MonoBehaviour
 		GameObject.Find ("OrangeScore").GetComponent<Text> ().text = ""+orange_score;
 	}
 
-	void SetScore(int orange, int blue) {
-		blue_score = blue_score;
+	public void SetScore(int orange, int blue) {
+		blue_score = blue;
 		orange_score = blue; 
 	}
 }
