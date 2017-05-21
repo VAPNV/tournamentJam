@@ -33,6 +33,7 @@ public class GridManager : MonoBehaviour {
 				} else if (forY == -2 || forY == ScaleY * 2 + 2) {
 					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Map_Edge"), (this.transform.position + new Vector3 (forX, 0, forY)));
 					GRID_PIECE_GRIDDITY.Armour = 1000;
+					GRID_PIECE_GRIDDITY.transform.Rotate (new Vector3 (0, 90, 0));
 				} else if (forX == ScaleX)
 				{
 					GRID_PIECE_GRIDDITY = this.CreateGrid (GetElementByName("Ground_Wall"), (this.transform.position + new Vector3 (forX, 0, forY)));
