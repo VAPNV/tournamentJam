@@ -49,7 +49,8 @@ public class Combat : NetworkBehaviour {
         {
             GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
             PlayerMove plr = GetComponent<PlayerMove>();
-           // Debug.Log(plr.grenadesLeft);
+
+            //Debug.Log(plr.grenadesLeft);
             GameObject.Find("AmmoText").GetComponent<Text>().text = "";
             if (plr.GetToolAction() == "Rifle")
 			    GameObject.Find ("AmmoText").GetComponent<Text> ().text = "AMMO: " + Ammo/15;

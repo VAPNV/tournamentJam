@@ -1559,6 +1559,8 @@ MonoBehaviour:
   minePrefab: {fileID: 1343613607856672, guid: 6050673a8c7b144478e9faf130972da3, type: 2}
   playerIsHoldingFlag: 0
   flag_ref: {fileID: 0}
+  orangeFlagModel: {fileID: 1648954953494700}
+  blueFlagModel: {fileID: 1593685714058804}
   WhatToBuild: 0
   fighting: 0
   buildTools:
