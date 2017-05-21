@@ -333,11 +333,11 @@ GameObject:
   - component: {fileID: 4052551043401332}
   - component: {fileID: 114661953782234962}
   - component: {fileID: 114315240119979456}
+  - component: {fileID: 143801838228791472}
   - component: {fileID: 114095817044687762}
   - component: {fileID: 114793610784740346}
   - component: {fileID: 114345775587542854}
   - component: {fileID: 114519758174952138}
-  - component: {fileID: 143801838228791472}
   m_Layer: 0
   m_Name: PlayerCube
   m_TagString: Player
@@ -423,7 +423,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1899933073471302}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.15, y: -12.68, z: 18.031658}
+  m_LocalPosition: {x: -91.28223, y: 83.72918, z: 133.72128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4798080828871302}
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   debug: 0
   grenadePrefab: {fileID: 1092094957561228, guid: 6c2bfccc836340e40a3ca1c26ba53b51,
     type: 2}
-  minePrefab: {fileID: 0}
+  minePrefab: {fileID: 1343613607856672, guid: 6050673a8c7b144478e9faf130972da3, type: 2}
   playerIsHoldingFlag: 0
   flag_ref: {fileID: 0}
   WhatToBuild: 0
@@ -1566,6 +1566,7 @@ MonoBehaviour:
   - {fileID: 1571368861302074}
   - {fileID: 1072235516767070}
   - {fileID: 1138003608792514}
+  - {fileID: 1788105402110304}
   fightTools:
   - {fileID: 1917735500753308}
   - {fileID: 1928303950398854}
@@ -1574,6 +1575,7 @@ MonoBehaviour:
   - PickAxe
   - Hammer
   - Concrete
+  - Mine
   - Rifle
   - Grenade
   RifleDamage: 30

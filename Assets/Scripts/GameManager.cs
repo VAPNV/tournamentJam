@@ -26,6 +26,14 @@ public class GameManager : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
+		GameObject.Find ("BlueScore").GetComponent<Text> ().text = ""+Score_Blue;
+		GameObject.Find ("OrangeScore").GetComponent<Text> ().text = ""+Score_Orange;
+
+		//GameObject.Find ("HUD").GetComponent<Hud>().SetScore (this.Score_Orange, this.Score_Blue);
+
+
+
 		//ANNOUNCEMENTS!
 
 //		foreach (Combat FightingBot in this.GetComponentsInChildren<Combat>())
