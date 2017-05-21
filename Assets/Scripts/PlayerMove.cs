@@ -42,6 +42,8 @@ public class PlayerMove : NetworkBehaviour {
     //FLAG
     public bool playerIsHoldingFlag = false;
     public GameObject flag_ref;
+    public GameObject orangeFlagModel;
+    public GameObject blueFlagModel;
 
     // INVENTORY
     [SyncVar]
@@ -513,11 +515,30 @@ public class PlayerMove : NetworkBehaviour {
     {
         this.playerIsHoldingFlag = val;
         flag_ref = flagRef;
+        toggleFlagOnPlayerVisibility(true, flag_ref.GetComponent<flag_Controller>().flag_team);
+    }
+
+
+    //Toggles the visibility of the flag on the player model
+    //Team_ID is the ID of the flag that was captured
+    public void toggleFlagOnPlayerVisibility(bool visible, Combat.Team team_ID)
+    {
+        if(team_ID == Combat.Team.Blue)
+        {
+            blueFlagModel.gameObject.SetActive(visible);
+        } else if (team_ID == Combat.Team.Orange)
+        {
+            orangeFlagModel.gameObject.SetActive(visible);
+        } else
+        {
+            Debug.Log("THIS SHOULD NOT HAPPEN!");
+        }
     }
 
     private void playerDropFlag() {
         flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
         playerIsHoldingFlag = false;
+        toggleFlagOnPlayerVisibility(false, flag_ref.GetComponent<flag_Controller>().flag_team);
         flag_ref = null;
     }
 }
