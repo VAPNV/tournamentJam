@@ -26,6 +26,12 @@ public class Combat : NetworkBehaviour {
 	[SyncVar]
 	public Team team;
 
+    public void Start()
+    {
+        if (isServer)
+            RpcRespawn();
+    }
+
     public override void OnStartLocalPlayer()
     {
 		if (PlayerPrefs.GetInt ("team") == 0) {
@@ -85,8 +91,10 @@ public class Combat : NetworkBehaviour {
     [ClientRpc]
     void RpcRespawn() {
         // Move back to zero location
-        NetworkStartPosition[] spawns = FindObjectsOfType<NetworkStartPosition>();
-        NetworkStartPosition spawn = spawns[Random.Range(0, spawns.Length - 1)];
+        TeamSpawn[] spawns = FindObjectsOfType<TeamSpawn>();
+        TeamSpawn spawn = spawns[Random.Range(0, spawns.Length - 1)];
+        while (spawn.Team != team)
+            spawn = spawns[Random.Range(0, spawns.Length - 1)];
         transform.position = spawn.transform.position;
         transform.rotation = spawn.transform.rotation;
     }
