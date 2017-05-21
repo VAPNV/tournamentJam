@@ -225,3 +225,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flag_team: 1
+  Boss: {fileID: 0}

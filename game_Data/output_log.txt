@@ -15,75 +15,20 @@ Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll (
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Study\tournamentjam\game_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.022 seconds
+- Completed reload, in  0.030 seconds
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Study\tournamentjam\game_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.330223 ms
+UnloadTime: 1.194667 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 3d80 -> priority: 1 
-  Thread -> id: 3ac4 -> priority: 1 
+  Thread -> id: 361c -> priority: 1 
+  Thread -> id: 1e8c -> priority: 1 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 5.473782 ms
-NullReferenceException: Object reference not set to an instance of an object
-  at PlayerMove.Start () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
+UnloadTime: 5.928449 ms
 
-NullReferenceException: Object reference not set to an instance of an object
-  at PlayerMove.Start () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-
-Unloading 14 unused Assets to reduce memory usage. Loaded Objects now: 40965.
-Total: 19.416018 ms (FindLiveObjects: 3.220891 ms CreateObjectMapping: 0.792000 ms MarkObjects: 5.160893 ms  DeleteObjects: 10.241342 ms)
-
-NullReferenceException: Object reference not set to an instance of an object
-  at PlayerMove.Start () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-Shovel
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-PickAxe
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-PickAxe
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-PickAxe
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Shovel
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Rifle
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Rifle
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Rifle
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Rifle
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-FLAG CAN BE CAPTURED AGAIN!
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+Unloading 14 unused Assets to reduce memory usage. Loaded Objects now: 41052.
+Total: 18.429794 ms (FindLiveObjects: 2.157779 ms CreateObjectMapping: 0.772445 ms MarkObjects: 5.169337 ms  DeleteObjects: 10.329785 ms)
 

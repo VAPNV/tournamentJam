@@ -29,7 +29,7 @@ GameObject:
   - component: {fileID: 114130120207365138}
   m_Layer: 0
   m_Name: Flag_Orange
-  m_TagString: Untagged
+  m_TagString: Flag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,3 +225,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flag_team: 0
+  Boss: {fileID: 0}
