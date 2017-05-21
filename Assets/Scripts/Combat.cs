@@ -52,7 +52,7 @@ public class Combat : NetworkBehaviour {
             this.name = "Orange-" + Random.Range(100, 999);
 
         GameObject.Find("NameText").GetComponent<Text>().text = this.name;
-        Debug.Log("CALLED");
+        Debug.Log(oranges + " " + blues);
     }
 
     public override void OnStartLocalPlayer()
