@@ -24,6 +24,7 @@ public class PlayerMove : NetworkBehaviour {
 
     public float jumpVelocity;
     public float gravity;
+    public float runSpeed;
     private MouseLook mouse;
     private Camera cam;
     private float gravVelocity;
@@ -140,7 +141,7 @@ public class PlayerMove : NetworkBehaviour {
 				foreach (KnockBackData data in toBeRemoved) {
 					knockbacks.Remove(data);
 				}
-        controller.Move(move * 0.1f + knockback + Gravity());
+        controller.Move(move * runSpeed + knockback + Gravity());
     }
 
     void Update()

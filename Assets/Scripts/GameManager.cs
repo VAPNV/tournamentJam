@@ -10,9 +10,11 @@ public class GameManager : NetworkBehaviour {
     private float buildTimeLeft;
     [SyncVar]
     private float fightText;
+    private float warmUp;
 	// Use this for initialization
 	void Start () {
         buildTimeLeft = buildTime;
+        if (isServer) warmUp = 5;
 	}
 	
 	// Update is called once per frame
@@ -28,6 +30,19 @@ public class GameManager : NetworkBehaviour {
             GameObject.Find("Announcement").GetComponent<Text>().text = "FIGHT!";
         if (!isServer)
             return;
+        if (warmUp > 0)
+        {
+            GameObject.Find("Announcement").GetComponent<Text>().text = "Server warmup";
+            warmUp -= Time.deltaTime;
+            return;
+        }
+        else if (warmUp < 0)
+        {
+            warmUp = 0;
+            Combat[] players = FindObjectsOfType<Combat>();
+            foreach (Combat plr in players)
+                plr.RpcRespawn();
+        }
         if (buildTimeLeft < 0)
         {
             buildTimeLeft = 0;

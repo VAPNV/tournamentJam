@@ -1482,6 +1482,7 @@ MonoBehaviour:
   RifleModel: {fileID: 23365730488976626}
   jumpVelocity: 0.2
   gravity: 0.01
+  runSpeed: 0.3
   debug: 0
   grenadePrefab: {fileID: 1092094957561228, guid: 6c2bfccc836340e40a3ca1c26ba53b51,
     type: 2}
