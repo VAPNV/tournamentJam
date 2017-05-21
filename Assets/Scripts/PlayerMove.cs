@@ -20,6 +20,7 @@ public class PlayerMove : NetworkBehaviour {
 
 	public MeshRenderer RobotModel;
 	public GameObject AllTheRobotParts;
+	public MeshRenderer RifleModel;
 
     public float jumpVelocity;
     public float gravity;
@@ -38,7 +39,11 @@ public class PlayerMove : NetworkBehaviour {
   	public GameObject minePrefab;
 		private ArrayList knockbacks = new ArrayList();
 
-	// INVENTORY
+    //FLAG
+    public bool playerIsHoldingFlag = false;
+    public GameObject flag_ref;
+
+    // INVENTORY
     [SyncVar]
 	public int WhatToBuild = 0;
     [SyncVar]
@@ -141,10 +146,13 @@ public class PlayerMove : NetworkBehaviour {
 
     void Update()
     {
-        if (GetComponent<Combat>().team == Combat.Team.Orange)
-            RobotModel.material.color = Color.yellow;
-        else if (GetComponent<Combat>().team == Combat.Team.Blue)
-            RobotModel.material.color = Color.blue;
+		if (GetComponent<Combat> ().team == Combat.Team.Orange) {
+			RobotModel.material.color = Color.yellow;
+			RifleModel.material.color = Color.yellow;
+		} else if (GetComponent<Combat> ().team == Combat.Team.Blue) {
+			RobotModel.material.color = Color.blue;
+			RifleModel.material.color = Color.blue;
+		}
         foreach (GameObject tool in buildTools)
         {
             tool.SetActive(false);
@@ -168,6 +176,16 @@ public class PlayerMove : NetworkBehaviour {
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
+        }
+        //Drops the flag if player is holding it
+        if (Input.GetKeyDown("y"))
+        {
+            if (playerIsHoldingFlag)
+            {
+                flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
+                playerIsHoldingFlag = false;
+                flag_ref = null;
+            }
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -276,7 +294,7 @@ public class PlayerMove : NetworkBehaviour {
         WhatToBuild = mod(WhatToBuild, fighting ? fightTools.Length : buildTools.Length);
     }
 
-    string GetToolAction()
+    public string GetToolAction()
     {
         if (fighting)
             return toolActions[WhatToBuild + buildTools.Length];
@@ -398,7 +416,7 @@ public class PlayerMove : NetworkBehaviour {
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
+                    if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
                     {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
                         concreteLeft--;
@@ -410,13 +428,16 @@ public class PlayerMove : NetworkBehaviour {
                     }
 
 
-                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+                        concreteLeft--;
+                    }
 
-					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
                     {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
-                        concreteLeft++;
+                        concreteLeft += 2;
                     }
 
 
@@ -468,7 +489,7 @@ public class PlayerMove : NetworkBehaviour {
         if (place == null)
             return;
 
-		Debug.Log ("Changing GRID " + place.x  + "-" + place.y  + " of type " + gridType);
+		//Debug.Log ("Changing GRID " + place.x  + "-" + place.y  + " of type " + gridType);
 
         place.ChangeTo(place.Mother.GetElementByName(gridType));
     }
@@ -490,4 +511,9 @@ public class PlayerMove : NetworkBehaviour {
 		SoundieSound.clip = clips[(int)WhatToPlay];
 
 	}
+    public void playerFlagSwitch(bool val, GameObject flagRef)
+    {
+        this.playerIsHoldingFlag = val;
+        flag_ref = flagRef;
+    }
 }

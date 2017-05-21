@@ -50,11 +50,15 @@ public class GridManager : MonoBehaviour {
 
 				if ((forX == ScaleX*2) & (forY == ScaleY)) {
 					GameObject GRID_PIECE = (GameObject)Instantiate (Flag_Blue, (this.transform.position + new Vector3 (forX, 0, forY)), this.transform.rotation);
-				}
-				else if ((forX == 0) & (forY == ScaleY)) {
+                    GRID_PIECE.GetComponentInChildren<flag_Controller>().setFlagStartPos(GRID_PIECE.transform.position, Combat.Team.Blue);
+
+                }
+                else if ((forX == 0) & (forY == ScaleY)) {
 					GameObject GRID_PIECE = (GameObject)Instantiate (Flag_Orange, (this.transform.position + new Vector3 (forX, 0, forY)), this.transform.rotation);
-				}
-			}
+                    GRID_PIECE.GetComponentInChildren<flag_Controller>().setFlagStartPos(GRID_PIECE.transform.position, Combat.Team.Orange);
+
+                }
+            }
 		}
 
 	}

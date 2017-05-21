@@ -1401,6 +1401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RobotModel: {fileID: 23875019667959908}
   AllTheRobotParts: {fileID: 1348360149964818}
+  RifleModel: {fileID: 23365730488976626}
   jumpVelocity: 0.2
   gravity: 0.01
   debug: 0
@@ -1438,7 +1439,7 @@ MonoBehaviour:
   ShootingEffect: {fileID: 1874824198269266, guid: c4ade3069d88e0f4d8bd7d6409be7b6a,
     type: 2}
   RifleBarrelEnd: {fileID: 1797266411894532}
-  RifleShootSound: {fileID: 8300000, guid: 4aaca35f6e05f3944bbf7186ff91c79b, type: 3}
+  RifleShootSound: {fileID: 8300000, guid: 0bd5e8342f77d5147977044ead42eb37, type: 3}
   RifleEmptySound: {fileID: 8300000, guid: fab489ac6bfab094ea57ca8506121f39, type: 3}
 --- !u!114 &114345775587542854
 MonoBehaviour:
