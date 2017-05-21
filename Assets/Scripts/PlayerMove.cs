@@ -181,9 +181,7 @@ public class PlayerMove : NetworkBehaviour {
         {
             if (playerIsHoldingFlag)
             {
-                flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
-                playerIsHoldingFlag = false;
-                flag_ref = null;
+                playerDropFlag();
             }
         }
         if (Input.GetMouseButtonDown(0))
@@ -509,5 +507,11 @@ public class PlayerMove : NetworkBehaviour {
     {
         this.playerIsHoldingFlag = val;
         flag_ref = flagRef;
+    }
+
+    private void playerDropFlag() {
+        flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
+        playerIsHoldingFlag = false;
+        flag_ref = null;
     }
 }
