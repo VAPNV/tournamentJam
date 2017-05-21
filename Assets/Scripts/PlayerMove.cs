@@ -172,7 +172,7 @@ public class PlayerMove : NetworkBehaviour {
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
             if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
-              CmdThrowGrenade(cam.transform.forward, hold);
+              CmdThrowGrenade(cam.transform.position, cam.transform.forward, hold);
                     grenadesLeft--;
                     if (grenadesLeft <= 0)
                         CmdCycleWhatToBuild(1);
@@ -253,8 +253,9 @@ public class PlayerMove : NetworkBehaviour {
     }
 
     [Command]
-    void CmdThrowGrenade(Vector3 dir, float hold) {
-      GameObject grenade = (GameObject) Instantiate(grenadePrefab, fightTools[WhatToBuild].transform.position + dir, Quaternion.identity);
+    void CmdThrowGrenade(Vector3 pos, Vector3 dir, float hold) {
+			//fightTools[WhatToBuild].transform.position
+      GameObject grenade = (GameObject) Instantiate(grenadePrefab, pos + dir, Quaternion.identity);
       grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
       grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
       NetworkServer.Spawn(grenade);
@@ -315,7 +316,7 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (SoundType.RifleEmptySound);
 
 		}
-			else if (Physics.Raycast (pos, dir, out hit, 4)) {
+			else if (Physics.Raycast (pos + forward, dir, out hit, 4)) {
 				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 
