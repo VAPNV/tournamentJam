@@ -74,13 +74,13 @@ public class Combat : NetworkBehaviour {
 //		}
 
         if (health <= 0) {
-            if(shooter.GetComponent<PlayerMove>().playerIsHoldingFlag)
+            if (GetComponent<PlayerMove>().playerIsHoldingFlag)
             {
-                shooter.GetComponent<PlayerMove>().playerDropFlag();
+                GetComponent<PlayerMove>().RpcplayerDropFlag(transform.position);
             }
 			GetComponentInParent<GameManager> ().AnnounceMessage (shooter.name + " killed " + this.name + "!");
 
-			if (shooter == this | shooter.team == this.team)
+			if (shooter == this || shooter.team == this.team)
 				this.GetScore (-1);
 			else
 				shooter.GetScore (1);

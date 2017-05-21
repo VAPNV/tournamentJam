@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-public class flag_Controller : MonoBehaviour
+public class flag_Controller : NetworkBehaviour
 {
 
 
@@ -112,6 +112,12 @@ public class flag_Controller : MonoBehaviour
         is_flag_home = true;
         this.gameObject.SetActive(true);
 
+    }
+
+    [ClientRpc]
+    void RpcSetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }
 

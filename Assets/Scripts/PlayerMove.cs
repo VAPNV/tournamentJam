@@ -198,7 +198,7 @@ public class PlayerMove : NetworkBehaviour {
         {
             if (playerIsHoldingFlag)
             {
-                playerDropFlag();
+                RpcplayerDropFlag(transform.position);
             }
         }
         if (Input.GetMouseButtonDown(0))
@@ -552,8 +552,9 @@ public class PlayerMove : NetworkBehaviour {
         }
     }
 
-    public void playerDropFlag() {
-        flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
+    [ClientRpc]
+    public void RpcplayerDropFlag(Vector3 position) {
+        flag_ref.GetComponent<flag_Controller>().dropFlag(position);
         playerIsHoldingFlag = false;
         toggleFlagOnPlayerVisibility(false, flag_ref.GetComponent<flag_Controller>().flag_team);
         flag_ref = null;

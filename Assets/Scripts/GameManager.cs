@@ -89,7 +89,7 @@ public class GameManager : NetworkBehaviour {
 
 	public void AnnounceMessage(string WhatToSend)
 	{
-		Debug.Log (WhatToSend);
+		//Debug.Log (WhatToSend);
 
 		GameObject.Find ("Announcement").GetComponent<Text> ().text = WhatToSend;
 	}

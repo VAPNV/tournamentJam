@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 65175872818730338}
   - component: {fileID: 54782788821407036}
   - component: {fileID: 114790555172761410}
+  - component: {fileID: 114353175670000532}
+  - component: {fileID: 114247071834717554}
   m_Layer: 0
   m_Name: Flag_Blue
   m_TagString: Untagged
@@ -158,6 +160,59 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114247071834717554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133726913270796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.2
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114353175670000532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133726913270796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 173
+    i1: 128
+    i2: 69
+    i3: 61
+    i4: 100
+    i5: 192
+    i6: 94
+    i7: 148
+    i8: 137
+    i9: 244
+    i10: 46
+    i11: 232
+    i12: 206
+    i13: 90
+    i14: 137
+    i15: 134
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114790555172761410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -169,3 +224,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a4eeefe45a495408690e1a53194049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flag_team: 1
