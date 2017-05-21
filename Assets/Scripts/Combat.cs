@@ -65,13 +65,16 @@ public class Combat : NetworkBehaviour {
 
     public void Update()
 	{
-        if (team == Team.Orange)
+        if (isLocalPlayer)
         {
-            GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(1.000f, 0.549f, 0.000f);
-        }
-        if (team == Team.Blue)
-        {
-            GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(0.000f, 0.000f, 1.000f);
+            if (team == Team.Orange)
+            {
+                GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(1.000f, 0.549f, 0.000f);
+            }
+            if (team == Team.Blue)
+            {
+                GameObject.Find("TeamColor").transform.GetChild(0).GetComponent<Image>().color = new Color(0.000f, 0.000f, 1.000f);
+            }
         }
 
         if (Ammo<100)
