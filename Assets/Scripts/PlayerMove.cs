@@ -35,6 +35,7 @@ public class PlayerMove : NetworkBehaviour {
     public bool debug = false;
 
   	public GameObject grenadePrefab;
+  	public GameObject minePrefab;
 		private ArrayList knockbacks = new ArrayList();
 
 	// INVENTORY
@@ -288,7 +289,12 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
+		if (GetToolAction() == "Mine") {
+			GameObject mine = (GameObject) Instantiate(minePrefab, pos + dir, Quaternion.identity);
+			mine.GetComponent<Mine>().owner = GetComponent<Combat>();
+			mine.GetComponent<Rigidbody>().velocity = dir * 6;
+			NetworkServer.Spawn(mine);
+		} else if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
 
 			this.GetComponent<Combat> ().Ammo = this.GetComponent<Combat> ().Ammo - 15;
 
