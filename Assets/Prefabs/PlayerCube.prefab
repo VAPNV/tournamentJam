@@ -1579,9 +1579,9 @@ MonoBehaviour:
   - Rifle
   - Grenade
   RifleDamage: 30
-  grenadesLeft: 2
-  hammerLeft: 10
-  concreteLeft: 5
+  grenadesLeft: 3
+  hammerLeft: 20
+  concreteLeft: 12
   minesLeft: 3
   SoundplayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
   ItemSwichSound: {fileID: 8300000, guid: ec402b69ed28d394bb1dc3d200d7ed67, type: 3}

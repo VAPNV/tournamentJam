@@ -125,6 +125,8 @@ public class Combat : NetworkBehaviour {
             if (destroyOnDeath) {
                 Destroy(gameObject);
             } else {
+				
+				GetComponent<PlayerMove>().grenadesLeft = 2;
                 health = maxHealth;
 
                 // Called on the server, will be invoked on the clients
@@ -153,6 +155,9 @@ public class Combat : NetworkBehaviour {
       if (p != null) {
         p.knockbacks.Clear();
       }
+
+		GetComponent<PlayerMove>().grenadesLeft = 2;
+
 
         // Move back to zero location
         TeamSpawn[] spawns = FindObjectsOfType<TeamSpawn>();
