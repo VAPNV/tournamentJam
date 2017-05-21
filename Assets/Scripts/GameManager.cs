@@ -10,24 +10,40 @@ public class GameManager : NetworkBehaviour {
     private float buildTimeLeft;
     [SyncVar]
     private float fightText;
+
+	[SyncVar]
+	public int Score_Orange;
+	[SyncVar]
+	public int Score_Blue;
+
 	// Use this for initialization
 	void Start () {
         buildTimeLeft = buildTime;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        GameObject.Find("Announcement").GetComponent<Text>().text = "";
-        if (buildTimeLeft > 0)
-        {
-            GameObject.Find("Announcement").GetComponent<Text>().text = "Prepare your trenches";
-            if (buildTimeLeft <= 4)
-                GameObject.Find("Announcement").GetComponent<Text>().text = "Fighting in " + (int)buildTimeLeft;
-        }
-        if (fightText > 0)
-            GameObject.Find("Announcement").GetComponent<Text>().text = "FIGHT!";
-        if (!isServer)
+
+		//ANNOUNCEMENTS!
+
+//		foreach (Combat FightingBot in this.GetComponentsInChildren<Combat>())
+//		{
+//			if (FightingBot.team == Combat.Team.Blue)
+//			else if (FightingBot.team == Combat.Team.Blue)
+//
+//		}
+
+       // GameObject.Find("Announcement").GetComponent<Text>().text = "";
+		if (buildTimeLeft <= 30 && buildTimeLeft > 0)
+			AnnounceMessage ("Battle stats in " + (int)buildTimeLeft);
+		else if (buildTimeLeft > 0) 
+			AnnounceMessage ("BUILD YOUR TRENCHES!");
+		else if (fightText > 0 )
+			AnnounceMessage ("FIGHT!");
+        else if (!isServer)
             return;
+
         if (buildTimeLeft < 0)
         {
             buildTimeLeft = 0;
@@ -46,6 +62,14 @@ public class GameManager : NetworkBehaviour {
         if (fightText > 0)
             fightText -= Time.deltaTime;
     }
+
+
+	public void AnnounceMessage(string WhatToSend)
+	{
+		Debug.Log (WhatToSend);
+
+		GameObject.Find ("Announcement").GetComponent<Text> ().text = WhatToSend;
+	}
 
     int mod(int x, int m)
     {

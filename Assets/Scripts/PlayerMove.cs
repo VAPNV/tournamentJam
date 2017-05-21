@@ -77,6 +77,13 @@ public class PlayerMove : NetworkBehaviour {
 
 
 	void Start(){
+
+		this.transform.SetParent (GameObject.Find ("GameManager").transform);
+		if (GetComponent<Combat> ().team == Combat.Team.Blue)
+			this.name = "BLue Robot " +  Random.Range (100, 999);
+		else if (GetComponent<Combat> ().team == Combat.Team.Orange)
+			this.name = "Orange Robot " +  Random.Range (100, 999);
+
         foreach (GameObject tool in buildTools) {
 		        tool.SetActive(false);
         }
