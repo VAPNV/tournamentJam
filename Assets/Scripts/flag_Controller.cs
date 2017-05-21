@@ -16,11 +16,15 @@ public class flag_Controller : MonoBehaviour
     bool flagOnCooldown = false;
     bool is_flag_home = true;
 
+	public GameManager Boss;
+
     private Vector3 startPos;
 
     // Use this for initialization
     void Start()
     {
+		
+	
 
     }
 
@@ -33,41 +37,57 @@ public class flag_Controller : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         //Are we colliding with a player=
-        
-        if (col.tag == "Player")
-        {
-            var target = col.gameObject.GetComponent<PlayerMove>();
+//        
+		// commented away as there is weird nonsynch stuff :(
 
-            if (target.playerIsHoldingFlag && target.GetComponent<Combat>().team == flag_team)
-            {
-                Debug.Log("SCORE!");
-                target.playerIsHoldingFlag = false;
-                target.flag_ref.GetComponent<flag_Controller>().returnToStart();
-                target.toggleFlagOnPlayerVisibility(false, target.flag_ref.GetComponent<flag_Controller>().flag_team);
-                target.flag_ref = null;
-            }
-
-            else if (!flagOnCooldown && target.GetComponent<Combat>().team != flag_team)
-            {
-                //We need to pass reference to the flag to activate it again once dropped
-                target.playerFlagSwitch(true, this.gameObject);
-                if (is_flag_home)
-                {
-                    is_flag_home = false;
-                }
-                else
-                {
-                    CancelInvoke("return_to_base_CD");
-                    flag_to_home_cooldown = 10;
-                }
-                this.gameObject.SetActive(false);
-            }
-        }
+//        if (col.tag == "Player")
+//        {
+//            var target = col.gameObject.GetComponent<PlayerMove>();
+//
+//            if (target.playerIsHoldingFlag && target.GetComponent<Combat>().team == flag_team)
+//            {
+//                Debug.Log("SCORE!");
+//
+//				GameObject.Find ("GameManager").GetComponent<GameManager>().AnnounceMessage (target.name + " SCORES! for " + flag_team + "!");
+//
+//				Combat GivePointsToScorer = col.gameObject.GetComponent<Combat>();
+//
+//				GivePointsToScorer.GetScore (10);
+//
+//                target.playerIsHoldingFlag = false;
+//                target.flag_ref.GetComponent<flag_Controller>().returnToStart();
+//                target.toggleFlagOnPlayerVisibility(false, target.flag_ref.GetComponent<flag_Controller>().flag_team);
+//                target.flag_ref = null;
+//            }
+//
+//            else if (!flagOnCooldown && target.GetComponent<Combat>().team != flag_team)
+//            {
+//
+//
+//
+//				GameObject.Find ("GameManager").GetComponent<GameManager>().AnnounceMessage (flag_team + " flag taken!");
+//
+//                //We need to pass reference to the flag to activate it again once dropped
+//                target.playerFlagSwitch(true, this.gameObject);
+//                if (is_flag_home)
+//                {
+//                    is_flag_home = false;
+//                }
+//                else
+//                {
+//                    CancelInvoke("return_to_base_CD");
+//                    flag_to_home_cooldown = 10;
+//                }
+//                this.gameObject.SetActive(false);
+//            }
+//        }
     }
 
 
     public void dropFlag(Vector3 pos)
     {
+		GameObject.Find ("GameManager").GetComponent<GameManager>().AnnounceMessage (flag_team + " flag dropped!");
+
         this.gameObject.transform.position = pos;
         this.gameObject.SetActive(true);
         flagOnCooldown = true;
@@ -92,6 +112,8 @@ public class flag_Controller : MonoBehaviour
     {
         if (--flag_to_home_cooldown == 0)
         {
+			GameObject.Find ("GameManager").GetComponent<GameManager>().AnnounceMessage (flag_team + " flag returned to base!");
+
             flagOnCooldown = false;
             CancelInvoke("return_to_base_CD");
             flag_to_home_cooldown = 10;

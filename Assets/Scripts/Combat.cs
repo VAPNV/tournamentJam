@@ -90,6 +90,8 @@ public class Combat : NetworkBehaviour {
             } else {
                 health = maxHealth;
 
+				GetComponent<PlayerMove> ().grenadesLeft = 2;
+
                 // Called on the server, will be invoked on the clients
                 RpcRespawn();
             }
