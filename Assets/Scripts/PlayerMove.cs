@@ -26,7 +26,9 @@ public class PlayerMove : NetworkBehaviour {
     private Camera cam;
     private float gravVelocity;
     private CharacterController controller;
+    [SyncVar]
     private float hold = 0;
+		[SyncVar]
     private bool leftButtonHeld = false;
     [SyncVar]
     public bool debug = false;
@@ -155,9 +157,7 @@ public class PlayerMove : NetworkBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            fighting = !fighting;
-            WhatToBuild = 0;
-            debug = true;
+					CmdCycleDebug();
         }
         if (leftButtonHeld) {
           hold += Time.deltaTime;
@@ -167,12 +167,12 @@ public class PlayerMove : NetworkBehaviour {
 		    if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
             leftButtonHeld = true;
           } else {
-				CmdFire(cam.transform.forward + new Vector3(( Random.Range(-0.02f,0.02f)) , (Random.Range(-0.02f,0.02f)),(Random.Range(-0.02f,0.02f)) ) );
+				CmdFire(cam.transform.position, cam.transform.forward, cam.transform.forward + new Vector3(( Random.Range(-0.02f,0.02f)) , (Random.Range(-0.02f,0.02f)),(Random.Range(-0.02f,0.02f)) ) );
 					}
 				} else if (Input.GetMouseButtonUp(0)) {
           if (hold > 0) {
             if (GetToolAction() == "Grenade" && grenadesLeft > 0) {
-              CmdThrowGrenade(cam.transform.forward);
+              CmdThrowGrenade(cam.transform.forward, hold);
                     grenadesLeft--;
                     if (grenadesLeft <= 0)
                         CmdCycleWhatToBuild(1);
@@ -232,6 +232,13 @@ public class PlayerMove : NetworkBehaviour {
       return r<0 ? r+m : r;
   }
 
+	[Command]
+	void CmdCycleDebug() {
+		fighting = !fighting;
+		WhatToBuild = 0;
+		debug = true;
+	}
+
 	/// <summary>
 	/// Plays single sound and kills itself. Note: allows multiple at the same time!!
 	/// </summary>
@@ -241,12 +248,12 @@ public class PlayerMove : NetworkBehaviour {
     // [Command] tells this will be called from client but invoked on server
     // Cmd-prefix in Command-methods is a common practice
     [Command]
-    void CmdFire(Vector3 dir) {
-        CmdShoot(dir);
+    void CmdFire(Vector3 pos, Vector3 forward,Vector3 dir) {
+        CmdShoot(pos, forward, dir);
     }
 
     [Command]
-    void CmdThrowGrenade(Vector3 dir) {
+    void CmdThrowGrenade(Vector3 dir, float hold) {
       GameObject grenade = (GameObject) Instantiate(grenadePrefab, fightTools[WhatToBuild].transform.position + dir, Quaternion.identity);
       grenade.GetComponent<Grenade>().shooter = GetComponent<Combat>();
       grenade.GetComponent<Rigidbody>().velocity = dir * Mathf.Clamp(hold, 0, 0.75f) / 0.75f * 16;
@@ -269,7 +276,7 @@ public class PlayerMove : NetworkBehaviour {
     }
 
     [Command]
-    void CmdShoot(Vector3 dir)
+    void CmdShoot(Vector3 pos, Vector3 forward, Vector3 dir)
 	{
 		RaycastHit hit;
 
@@ -279,7 +286,7 @@ public class PlayerMove : NetworkBehaviour {
 			this.GetComponent<Combat> ().Ammo = this.GetComponent<Combat> ().Ammo - 15;
 
             RpcShootEffect();
-			if (Physics.Raycast (cam.transform.position + cam.transform.forward, dir, out hit))
+			if (Physics.Raycast (pos + forward, dir, out hit))
             {
                 RpcDustEffect(hit.point);
 
@@ -308,7 +315,7 @@ public class PlayerMove : NetworkBehaviour {
 			this.CmdPlaySoundHere (SoundType.RifleEmptySound);
 
 		}
-			else if (Physics.Raycast (cam.transform.position, dir, out hit, 4)) {
+			else if (Physics.Raycast (pos, dir, out hit, 4)) {
 				Debug.DrawRay (hit.point, Vector3.up, Color.red, 3);
 
 

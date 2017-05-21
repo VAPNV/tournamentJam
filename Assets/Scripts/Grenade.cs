@@ -24,47 +24,51 @@ public class Grenade : NetworkBehaviour {
 
 				this.CmdPlaySoundHere ();
 				Debug.Log ("SHOULD BOOM!");
-
-				Destroy(gameObject);
-				float radius = 10;
-				float power = 200;
-				Vector3 explosionPos = transform.position;
-				Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
-				foreach (Collider hit in colliders)
-				{
-					Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-					CharacterController controller = hit.GetComponent<CharacterController>();
-					if (rb != null) {
-						rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
-					} else if (controller != null) {
-						hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position, radius, 1));
-					}
-					var hitCombat = hit.GetComponent<Combat>();
-					if (hitCombat != null) {
-						hitCombat.TakeDamage(damage * 2, shooter);
-					}
-					if (hit.transform.GetComponentInParent<Grid>()) {
-						Grid GridThatWasHit = hit.GetComponent<Collider>().GetComponentInParent<Grid>();
-
-						if (GridThatWasHit.Damage (damage)) {
-							FindObjectsOfType<PlayerMove>()[0].RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
-						}
-					}
-				}
-
-
-
-				for (int n = 0; n < 100; n++) {
-					Vector3 dir = Random.insideUnitSphere + Vector3.up;
-					GameObject shrapnel = (GameObject) Instantiate(shrapnelPrefab, transform.position + dir, Quaternion.identity);
-					shrapnel.GetComponent<Bullet>().shooter = shooter;
-					shrapnel.GetComponent<Rigidbody>().velocity = dir * 6;
-					NetworkServer.Spawn(shrapnel);
-					Destroy(shrapnel, 6);
-				}
+				this.CmdExplode();
 			}
 
+	}
+
+	[Command]
+	void CmdExplode() {
+		Destroy(gameObject);
+		float radius = 10;
+		float power = 200;
+		Vector3 explosionPos = transform.position;
+		Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+		foreach (Collider hit in colliders)
+		{
+			Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+			CharacterController controller = hit.GetComponent<CharacterController>();
+			if (rb != null) {
+				rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
+			} else if (controller != null) {
+				hit.SendMessage("KnockBack", new PlayerMove.KnockBackData(power, transform.position, radius, 1));
+			}
+			var hitCombat = hit.GetComponent<Combat>();
+			if (hitCombat != null) {
+				hitCombat.TakeDamage(damage * 2, shooter);
+			}
+			if (hit.transform.GetComponentInParent<Grid>()) {
+				Grid GridThatWasHit = hit.GetComponent<Collider>().GetComponentInParent<Grid>();
+
+				if (GridThatWasHit.Damage (damage)) {
+					FindObjectsOfType<PlayerMove>()[0].RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, GridThatWasHit.BecomeThisAfterDeath.name);
+				}
+			}
+		}
+
+
+
+		for (int n = 0; n < 100; n++) {
+			Vector3 dir = Random.insideUnitSphere + Vector3.up;
+			GameObject shrapnel = (GameObject) Instantiate(shrapnelPrefab, transform.position + dir, Quaternion.identity);
+			shrapnel.GetComponent<Bullet>().shooter = shooter;
+			shrapnel.GetComponent<Rigidbody>().velocity = dir * 6;
+			NetworkServer.Spawn(shrapnel);
+			Destroy(shrapnel, 6);
+		}
 	}
 
 	[ClientRpc]
