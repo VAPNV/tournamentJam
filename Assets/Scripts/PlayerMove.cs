@@ -289,7 +289,7 @@ public class PlayerMove : NetworkBehaviour {
         WhatToBuild = mod(WhatToBuild, fighting ? fightTools.Length : buildTools.Length);
     }
 
-    string GetToolAction()
+    public string GetToolAction()
     {
         if (fighting)
             return toolActions[WhatToBuild + buildTools.Length];
@@ -406,7 +406,7 @@ public class PlayerMove : NetworkBehaviour {
 					this.CmdPlaySoundHere (SoundType.ConcreteAction);
 
 
-					if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
+                    if (GridThatWasHit.WhatIam == "Ground_Grass" && concreteLeft > 0)
                     {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteCube");
                         concreteLeft--;
@@ -418,13 +418,16 @@ public class PlayerMove : NetworkBehaviour {
                     }
 
 
-                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube")
-						RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteCube" && concreteLeft > 0)
+                    {
+                        RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_ConcreteWall");
+                        concreteLeft--;
+                    }
 
-					else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
+                    else if (GridThatWasHit.WhatIam == "Ground_ConcreteWall")
                     {
                         RpcGridChanged(GridThatWasHit.x, GridThatWasHit.y, "Ground_Muddy");
-                        concreteLeft++;
+                        concreteLeft += 2;
                     }
 
 
@@ -476,7 +479,7 @@ public class PlayerMove : NetworkBehaviour {
         if (place == null)
             return;
 
-		Debug.Log ("Changing GRID " + place.x  + "-" + place.y  + " of type " + gridType);
+		//Debug.Log ("Changing GRID " + place.x  + "-" + place.y  + " of type " + gridType);
 
         place.ChangeTo(place.Mother.GetElementByName(gridType));
     }

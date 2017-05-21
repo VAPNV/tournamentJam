@@ -45,10 +45,20 @@ public class Combat : NetworkBehaviour {
 
 		if (isLocalPlayer)
         {
-			GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
-			GameObject.Find ("AmmoText").GetComponent<Text> ().text = "AMMO: " + Ammo/15;
+            GameObject.Find("hp").GetComponent<Slider>().value = (float)health / (float)maxHealth;
+            PlayerMove plr = GetComponent<PlayerMove>();
+            Debug.Log(plr.grenadesLeft);
+            GameObject.Find("AmmoText").GetComponent<Text>().text = "";
+            if (plr.GetToolAction() == "Rifle")
+			    GameObject.Find ("AmmoText").GetComponent<Text> ().text = "AMMO: " + Ammo/15;
+            else if (plr.GetToolAction() == "Grenade")
+                GameObject.Find("AmmoText").GetComponent<Text>().text = "AMMO: " + plr.grenadesLeft;
+            else if (plr.GetToolAction() == "Concrete")
+                GameObject.Find("AmmoText").GetComponent<Text>().text = "CONCRETE: " + plr.concreteLeft;
+            else if (plr.GetToolAction() == "Hammer")
+                GameObject.Find("AmmoText").GetComponent<Text>().text = "WOOD: " + plr.hammerLeft;
         }
-	}
+    }
 
 	public void TakeDamage(int amount, Combat shooter) {
         if (!isServer)
