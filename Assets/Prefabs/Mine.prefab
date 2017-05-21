@@ -24,6 +24,8 @@ GameObject:
   - component: {fileID: 114649299396334150}
   - component: {fileID: 54358613260960528}
   - component: {fileID: 65753253020788040}
+  - component: {fileID: 114835860375352274}
+  - component: {fileID: 114762120785560808}
   m_Layer: 5
   m_Name: Mine
   m_TagString: Untagged
@@ -123,3 +125,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   damage: 50
+  toArm: 0.7
+  BoomSound: {fileID: 8300000, guid: 73b1900637372264fbb900a24b3aad48, type: 3}
+  SoundPlayerPrefab: {fileID: 175754, guid: 016d1dfbb1b7c81409f0fb185c2550b9, type: 2}
+--- !u!114 &114762120785560808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343613607856672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114835860375352274
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343613607856672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 96
+    i1: 80
+    i2: 103
+    i3: 58
+    i4: 140
+    i5: 123
+    i6: 20
+    i7: 68
+    i8: 120
+    i9: 233
+    i10: 250
+    i11: 241
+    i12: 48
+    i13: 151
+    i14: 45
+    i15: 163
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
