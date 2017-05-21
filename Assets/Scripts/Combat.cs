@@ -24,7 +24,7 @@ public class Combat : NetworkBehaviour {
     public int health = maxHealth;
 
 	[SyncVar]
-	public Team team;
+	public Team team = Team.None;
 
     public void Start()
     {
@@ -38,11 +38,11 @@ public class Combat : NetworkBehaviour {
             if (plr.team == Team.Orange)
                 oranges++;
         }
-        if (oranges < blues)
+        if (oranges < blues && team == Team.None)
             this.team = Team.Orange;
-        else if (blues < oranges)
+        if (blues < oranges && team == Team.None)
             this.team = Team.Blue;
-        else
+        if (blues == oranges && team == Team.None)
             this.team = Team.Orange;
 
         this.transform.SetParent(GameObject.Find("GameManager").transform);
