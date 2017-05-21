@@ -105,7 +105,7 @@ public class Combat : NetworkBehaviour {
 
     // ClientRpc calls are sent from objects on the server to objects on clients
     [ClientRpc]
-    void RpcRespawn() {
+    public void RpcRespawn() {
         // Move back to zero location
         NetworkStartPosition[] spawns = FindObjectsOfType<NetworkStartPosition>();
         NetworkStartPosition spawn = spawns[Random.Range(0, spawns.Length - 1)];

@@ -24,6 +24,7 @@ public class PlayerMove : NetworkBehaviour {
 
     public float jumpVelocity;
     public float gravity;
+    public float runSpeed;
     private MouseLook mouse;
     private Camera cam;
     private float gravVelocity;
@@ -36,6 +37,7 @@ public class PlayerMove : NetworkBehaviour {
     public bool debug = false;
 
   	public GameObject grenadePrefab;
+  	public GameObject minePrefab;
 		private ArrayList knockbacks = new ArrayList();
 
     //FLAG
@@ -147,7 +149,7 @@ public class PlayerMove : NetworkBehaviour {
 				foreach (KnockBackData data in toBeRemoved) {
 					knockbacks.Remove(data);
 				}
-        controller.Move(move * 0.1f + knockback + Gravity());
+        controller.Move(move * runSpeed + knockback + Gravity());
     }
 
     void Update()
@@ -188,9 +190,7 @@ public class PlayerMove : NetworkBehaviour {
         {
             if (playerIsHoldingFlag)
             {
-                flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
-                playerIsHoldingFlag = false;
-                flag_ref = null;
+                playerDropFlag();
             }
         }
         if (Input.GetMouseButtonDown(0))
@@ -313,7 +313,12 @@ public class PlayerMove : NetworkBehaviour {
 		RaycastHit hit;
 
 		Debug.Log(GetToolAction());
-		if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
+		if (GetToolAction() == "Mine") {
+			GameObject mine = (GameObject) Instantiate(minePrefab, pos + dir, Quaternion.identity);
+			mine.GetComponent<Mine>().owner = GetComponent<Combat>();
+			mine.GetComponent<Rigidbody>().velocity = dir * 6;
+			NetworkServer.Spawn(mine);
+		} else if (GetToolAction() == "Rifle" && (this.GetComponent<Combat>().Ammo > 15)) {
 
 			this.GetComponent<Combat> ().Ammo = this.GetComponent<Combat> ().Ammo - 15;
 
@@ -516,5 +521,11 @@ public class PlayerMove : NetworkBehaviour {
     {
         this.playerIsHoldingFlag = val;
         flag_ref = flagRef;
+    }
+
+    private void playerDropFlag() {
+        flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
+        playerIsHoldingFlag = false;
+        flag_ref = null;
     }
 }
