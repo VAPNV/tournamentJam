@@ -548,7 +548,7 @@ public class PlayerMove : NetworkBehaviour {
         }
     }
 
-    private void playerDropFlag() {
+    public void playerDropFlag() {
         flag_ref.GetComponent<flag_Controller>().dropFlag(this.transform.position);
         playerIsHoldingFlag = false;
         toggleFlagOnPlayerVisibility(false, flag_ref.GetComponent<flag_Controller>().flag_team);
