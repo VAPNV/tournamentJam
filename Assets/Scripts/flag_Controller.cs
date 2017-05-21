@@ -33,9 +33,9 @@ public class flag_Controller : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         //Are we colliding with a player=
-        if (col.name == "PlayerCube(Clone)")
+        
+        if (col.tag == "Player")
         {
-
             var target = col.gameObject.GetComponent<PlayerMove>();
 
             if (target.playerIsHoldingFlag && target.GetComponent<Combat>().team == flag_team)
